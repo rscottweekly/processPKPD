@@ -1,8 +1,7 @@
 __author__ = 'rscottweekly'
-from process import settings
+from process import settings as process_settings
 
 import os
 
-coding_file = os.path.join(settings.base_dir, "CodingInformation.csv")
+coding_file = os.path.join(process_settings.base_dir, "CodingInformation.csv")
 
-print coding_file
