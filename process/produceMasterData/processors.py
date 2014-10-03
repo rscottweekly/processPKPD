@@ -133,10 +133,7 @@ def getBISforTime(time, BISData):
 
 #Calculation of timing
 def getETIsSevStart(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    print type(row['ETIsSev_Start'])
-    if type(row['ETIsSev_Start']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ETIsSev_Start'])
+    return processTimeforCol(patient, df_timing_calculations,'ETIsSev_Start')
 
 def getETIsSevEnd(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -167,7 +164,7 @@ def stopVolatileTime(patient, df_timing_calculations):
 def processTimeforCol(patient, df_timing_calculations, col):
     row = df_timing_calculations.loc[patient]
     if not row[col] == np.nan:
-        return datetime.datetime.combine(row['DateTime'],row[col])
+        return datetime.datetime.combine(row['DateTime'],pd.to_datetime(row[col]))
 
 
 def isPatientAlwaysSev(patient, df_timing_calculations):
@@ -399,7 +396,7 @@ def load_timing_calcs():
 
     def fixtime(col):
         #This lambda tests if the passed value is a string, it it is, it strptimes it, otherwise it returns a nan
-        fix_time = lambda x: datetime.datetime.strptime(x,"%H:%M") if isinstance(x, basestring) else np.nan
+        fix_time = lambda x: pd.to_datetime(datetime.datetime.strptime(x,"%H:%M")) if isinstance(x, basestring) else np.nan
         df_timing_calculations[col]= df_timing_calculations[col].apply(fix_time)
 
     df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
