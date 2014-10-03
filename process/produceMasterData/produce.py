@@ -11,8 +11,8 @@ import settings
 import processors
 
 def test_calc(coding_information):
-    df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
-    df_timing_calculations.set_index(['Patient'], inplace=True)
+    df_timing_calculations = processors.load_timing_calcs()
+
 
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)

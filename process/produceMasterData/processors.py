@@ -5,6 +5,7 @@ import datetime
 import numpy as np
 import settings
 import re
+import time
 
 
 
@@ -133,11 +134,9 @@ def getBISforTime(time, BISData):
 #Calculation of timing
 def getETIsSevStart(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
-    the_time = datetime.datetime.strptime(row['ETIsSev_Start'],"%H:%M")
-    print the_time
     print type(row['ETIsSev_Start'])
-    if type(the_time) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],the_time)
+    if type(row['ETIsSev_Start']) is datetime.time:
+        return datetime.datetime.combine(row['DateTime'],row['ETIsSev_Start'])
 
 def getETIsSevEnd(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -164,6 +163,12 @@ def stopVolatileTime(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
     if type(row['StopVolatile']) is datetime.time:
         return datetime.datetime.combine(row['DateTime'],row['StopVolatile'])
+
+def processTimeforCol(patient, df_timing_calculations, col):
+    row = df_timing_calculations.loc[patient]
+    if not row[col] == np.nan:
+        return datetime.datetime.combine(row['DateTime'],row[col])
+
 
 def isPatientAlwaysSev(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -389,3 +394,25 @@ def calcDeadspace(patient, patm):
 def correctVtforDeadSpace(vt, deadspace):
     return vt-(deadspace*vt)
 
+
+def load_timing_calcs():
+
+    def fixtime(col):
+        #This lambda tests if the passed value is a string, it it is, it strptimes it, otherwise it returns a nan
+        fix_time = lambda x: datetime.datetime.strptime(x,"%H:%M") if isinstance(x, basestring) else np.nan
+        df_timing_calculations[col]= df_timing_calculations[col].apply(fix_time)
+
+    df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
+    df_timing_calculations.set_index(['Patient'], inplace=True)
+
+    #df_timing_calculations['ETIsSev_Start']= df_timing_calculations['ETIsSev_Start'].apply(fix_time)
+
+    fixtime('ETIsSev_Start')
+    fixtime('ETIsSev_End')
+    fixtime('ETIsDes_Start')
+    fixtime('ETIsDes_End')
+    fixtime('ChangeTime')
+    fixtime('StopVolatile')
+
+    return df_timing_calculations
+    #ETIsSev_End	ETIsDes_Start	ETIsDes_End']
