@@ -9,4 +9,5 @@ coding_info = load_coding_data()
 #convert_bis_full(coding_info, False)
 #convert_monitordata_full(coding_info, False)
 
-full_calculation(coding_info)
+#full_calculation(coding_info)
+test_calc(coding_info)

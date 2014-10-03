@@ -10,23 +10,46 @@ from pytz import timezone
 import settings
 import processors
 
+def test_calc(coding_information):
+    df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
+    df_timing_calculations.set_index(['Patient'], inplace=True)
+
+    df_general_info = pd.read_csv(settings.filename_general_info)
+    df_general_info.set_index(['Patient'], inplace=True)
+
+    for index, patient_row in coding_information.iterrows():
+
+        print "-------------------------------PATIENT "+patient_row.UniqueID+"--------------------------------"
+        if not patient_row.ExcludeAll=='Y':
+
+            patient = patient_row.UniqueID
+
+            first_row_for_patient = True
+
+            monitor_data = processors.load_monitor_data(patient)
+            anaesthetic_details = processors.load_anaesthetic_details(patient)
+            bis_data = processors.loadBISforPatient(patient)
+
+            #row = df_timing_calculations.loc[patient]
+
+            #print row
+            time_range = processors.getTimeRangeForPatient(patient, df_timing_calculations)
+
+
 def full_calculation(coding_information):
     #Load timing calculations and plasma samples
     df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations)
     df_timing_calculations.set_index(['Patient'], inplace=True)
 
 
-    df_gas_pp_calculations = pd.read_csv(settings.filename_gas_pp_calcs, parse_dates=['datetime'])
-    df_gas_pp_calculations.set_index(['datetime'],inplace=True)
+#    df_gas_pp_calculations = pd.read_csv(settings.filename_gas_pp_calcs, parse_dates=['datetime'])
+ #   df_gas_pp_calculations.set_index(['datetime'],inplace=True)
 
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)
 
     df_blood_results = pd.read_csv(settings.filename_blood_results)
     df_blood_results.set_index(['Patient'], inplace=True)
-
-    #df_abg_results = pd.read_csv(settings.filename_abg_results)
-    #df_abg_results.set_index(['Patient], inplace=True)
 
     df_plasma = pd.read_csv(settings.filename_plasma, parse_dates=['Date','Time'], dayfirst=True)
     df_plasma = processors.process_plasma(df_plasma)

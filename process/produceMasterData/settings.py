@@ -13,7 +13,6 @@ dir_output = "OutputData/"
 filename_mastertimingcalculations = os.path.join(settings.base_dir,dir_generic,"Timing Calculations.csv")
 filename_gas_pp_calcs = os.path.join(settings.base_dir,dir_bloods,"pp_plasma_samples.csv")
 filename_blood_results = os.path.join(settings.base_dir,dir_bloods,"blood_results.csv")
-filename_abg_results = os.path.join(settings.base_dir,dir_bloods,"abg_results.csv")
 filename_general_info = os.path.join(settings.base_dir,dir_generic,"PKPD_Data.csv")
 filename_plasma = os.path.join(settings.base_dir,dir_bloods,"plasma_sample_concs.csv")
 

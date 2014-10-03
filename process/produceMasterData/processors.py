@@ -133,9 +133,11 @@ def getBISforTime(time, BISData):
 #Calculation of timing
 def getETIsSevStart(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
+    the_time = datetime.datetime.strptime(row['ETIsSev_Start'],"%H:%M")
+    print the_time
     print type(row['ETIsSev_Start'])
-    if type(row['ETIsSev_Start']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ETIsSev_Start'])
+    if type(the_time) is datetime.time:
+        return datetime.datetime.combine(row['DateTime'],the_time)
 
 def getETIsSevEnd(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
