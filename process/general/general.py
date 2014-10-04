@@ -8,6 +8,8 @@ import pandas as pd
 
 def load_coding_data():
     print "LOADING CODING DATA"
-    return pd.read_csv(settings.coding_file)
+    df = pd.read_csv(settings.coding_file)
+    df.set_index(['UniqueID'], inplace=True)
+    return df
 
 

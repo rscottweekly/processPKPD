@@ -136,30 +136,19 @@ def getETIsSevStart(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations,'ETIsSev_Start')
 
 def getETIsSevEnd(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    if type(row['ETIsSev_End']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ETIsSev_End'])
+    return processTimeforCol(patient, df_timing_calculations, 'ETIsSev_End')
 
 def getETIsDesStart(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    #print row['ETIsDes_Start']
-    if type(row['ETIsDes_Start']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ETIsDes_Start'])
+    return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_Start')
 
 def getETIsDesEnd(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    if type(row['ETIsDes_End']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ETIsDes_End'])
+    return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_End')
 
 def getChangeTime(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    if type(row['ChangeTime']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['ChangeTime'])
+    return processTimeforCol(patient, df_timing_calculations, 'ChangeTime')
 
 def stopVolatileTime(patient, df_timing_calculations):
-    row = df_timing_calculations.loc[patient]
-    if type(row['StopVolatile']) is datetime.time:
-        return datetime.datetime.combine(row['DateTime'],row['StopVolatile'])
+    return processTimeforCol(patient, df_timing_calculations,'StopVolatile')
 
 def processTimeforCol(patient, df_timing_calculations, col):
     row = df_timing_calculations.loc[patient]
@@ -187,24 +176,21 @@ def doesPatientSwitchVolatile(patient, df_timing_calculations):
     return not (isPatientAlwaysDes(patient, df_timing_calculations) or isPatientAlwaysSev(patient, df_timing_calculations))
 
 def getTimeRangeForPatient(patient, df_timing_calculations):
-    print df_timing_calculations.loc[patient]
+    #print df_timing_calculations.loc[patient]
 
     if isPatientAlwaysSev(patient, df_timing_calculations):
-        #print "1"
         start_time = getETIsSevStart(patient, df_timing_calculations)
         end_time = getETIsSevEnd(patient, df_timing_calculations)
     elif isPatientAlwaysDes(patient, df_timing_calculations):
-        #print '2'
         start_time = getETIsDesStart(patient, df_timing_calculations)
         end_time = getETIsDesEnd(patient, df_timing_calculations)
     else:
-        #print "3"
         start_time = getETIsSevStart(patient, df_timing_calculations)
         end_time = getETIsDesEnd(patient, df_timing_calculations)
 
-    print "Case start time is {0} and end time is {1}".format(str(start_time),str(end_time))
+    #print "Case start time is {0} and end time is {1}".format(str(start_time),str(end_time))
 
-    #return pd.date_range(start=start_time, end=end_time, freq='1Min')
+    return pd.date_range(start=start_time, end=end_time, freq='1Min')
 
 def isETSev(patient, time, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -311,39 +297,32 @@ def getPlasmaAA(patient, time, volatile):
 
 
 #Calculates Stages
-def getStage(patient, time, volatile):
+def getStage(patient, time, volatile, df_timing_calculations):
 
-    try:
-        times = getTimeRangeForPatient(patient)
+    times = getTimeRangeForPatient(patient, df_timing_calculations)
 
-        start_time = times[0]
-        change_over = getChangeTime(patient)
-        stop_volatile = stopVolatileTime(patient)
+    change_over = getChangeTime(patient, df_timing_calculations)
+    stop_volatile = stopVolatileTime(patient, df_timing_calculations)
 
-        if doesPatientSwitchVolatile(patient):
-            if time < change_over:
-                if volatile == 'S':
-                    return "1A"
-                else:
-                    return "20"
-            elif (time >= change_over) and (volatile == 'S'):
-                return "1C"
-            elif (time >= change_over) and (volatile == 'D') and (time < stop_volatile):
-                return "2A"
-            else:
-                return "2C"
-        else:
-            if time < change_over:
+    if doesPatientSwitchVolatile(patient, df_timing_calculations):
+        if time < change_over:
+            if volatile == 'S':
                 return "1A"
-            elif (time >= change_over) and (time < stop_volatile):
-                return "1B"
             else:
-                return "1C"
-    except:
-        print "Exception- patient = %i, time=%s, volatile=%s"%(patient, format(time), volatile)
-        from pprint import pprint
-        pprint(locals())
-        raise NameError("Failure!")
+                return "20"
+        elif (time >= change_over) and (volatile == 'S'):
+            return "1C"
+        elif (time >= change_over) and (volatile == 'D') and (time < stop_volatile):
+            return "2A"
+        else:
+            return "2C"
+    else:
+        if time < change_over:
+            return "1A"
+        elif (time >= change_over) and (time < stop_volatile):
+            return "1B"
+        else:
+            return "1C"
 
 
 def calc_amt (p, v, r, t):
@@ -371,21 +350,27 @@ def calcBMI(weight, height):
 def calcBSAMosteller(weight, height):
     return (height * weight / 36)**0.5
 
-def calcAAGrad(patient, patm):
-    if not patient in no_abg:
-        paO2 = float(df_bloods.loc[patient]['pO2'])
+def no_abg(patient, coding_info):
+    if coding_info.loc[patient]['NoABG']=='Y':
+        return True
+    else:
+        return False
+
+def calcAAGrad(patient, df_bloods, patm, coding_info):
+    if not no_abg(patient, coding_info):
+        paO2 = float(df_bloods.loc[patient]['PaO2'])
         FiO2 = float(df_bloods.loc[patient]['FiO2'])
-        PaCO2 = float(df_bloods.loc[patient]['PCO2'])
-        pAO2 = FiO2*(patm-const_PH2OmmHg)-PaCO2/0.8
+        PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
+        pAO2 = FiO2*(patm-settings.const_PH2OmmHg)-PaCO2/0.8
         return pAO2 - paO2
     else:
         return np.nan
 
-def calcDeadspace(patient, patm):
+def calcDeadspace(patient, df_bloods, etCO2, coding_info):
     #Using Bohr Equation
-    if not patient in no_abg:
-        PaCO2 = float(df_bloods.loc[patient]['PCO2'])
-        PeCO2 = float(df_bloods.loc[patient]['ETCO2'])
+    if not no_abg(patient, coding_info):
+        PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
+        PeCO2 = etCO2
         return (PaCO2-PeCO2)/PaCO2
     else:
         return np.nan
@@ -398,8 +383,7 @@ def load_timing_calcs():
 
     def fixtime(col):
         #This lambda tests if the passed value is a string, it it is, it strptimes it, otherwise it returns a nan
-        fix_time = lambda x: datetime.time.strptime(x,"%H:%M") if isinstance(x, basestring) else np.nan
-        fix_time = lambda x: pd.to_datetime(x) if isinstance(x, basestring) else np.nan
+        fix_time = lambda x: datetime.datetime.strptime(x,"%H:%M") if isinstance(x, basestring) else np.nan
 
         df_timing_calculations[col]= df_timing_calculations[col].apply(fix_time)
 
@@ -417,3 +401,11 @@ def load_timing_calcs():
 
     return df_timing_calculations
     #ETIsSev_End	ETIsDes_Start	ETIsDes_End']
+
+def calcGFR(age, weight, gender, creatinine ):
+    # (140-age) * (Wt in kg) * (0.85 if female) / (72 * Cr)
+    gfr = (140-age) * weight / (72 * creatinine)
+    if gender == 'F':
+        return gfr * 0.85
+    else:
+        return gfr
