@@ -10,4 +10,4 @@ coding_info = load_coding_data()
 #convert_monitordata_full(coding_info, False)
 
 #full_calculation(coding_info)
-test_calc(coding_info)
+full_calc(coding_info)

@@ -251,13 +251,18 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
             result = sev
     elif volatile == 'D':
         if isETDes(patient, time, timing_calculations):
-            result =  monitor_data.loc[time]['FeAA']
+            result = monitor_data.loc[time]['FeAA']
         else:
             des = anaesthetic_details.loc[time]['Des ET']
             result = des
 
-    if type(result) != np.float64:
-        print patient, time, volatile
+    if (type(result) != np.float64) and (type(result)!= float) and (type(result)!=int):
+        try:
+            result = np.float64(result)
+            return result
+        except:
+            print patient, time, volatile
+            return 0.0
     else:
         if not (np.isnan(result)):
             return result
@@ -279,15 +284,20 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
         else:
             des = anaesthetic_details.loc[time]['Des Fi']
             result = des
-    if type(result) != np.float64:
-        print patient, time, volatile
+    if (type(result) != np.float64) and (type(result)!= float) and (type(result)!=int):
+        try:
+            result = np.float64(result)
+            return result
+        except:
+            print patient, time, volatile
+            return 0.0
     else:
         if not (np.isnan(result)):
             return result
         else:
             return 0.0
 
-def getPlasmaAA(patient, time, volatile):
+def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
         if volatile == 'S':
             return df_plasma.loc[time]['Sev_mol/L']*1000000
