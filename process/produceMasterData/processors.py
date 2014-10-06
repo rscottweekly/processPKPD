@@ -77,7 +77,7 @@ def process_vent_data(df_anaesthetic_details):
                     try:
                         data_peep.append(int(re.search(r'\d+', splits[1]).group()))
                     except:
-                        print splits[0]
+                        data_peep.append(0)
 
                 else:
                     #this is PEEP data only
@@ -152,7 +152,7 @@ def stopVolatileTime(patient, df_timing_calculations):
 
 def processTimeforCol(patient, df_timing_calculations, col):
     row = df_timing_calculations.loc[patient]
-    if not row[col] == np.nan:
+    if not (row[col] == np.nan or type(row[col])==pd.tslib.NaTType):
         #there must be an easier way...
         the_time = datetime.time(*row[col].to_pydatetime().timetuple()[3:6])
         return datetime.datetime.combine(row['DateTime'],the_time)
@@ -242,15 +242,15 @@ def isETDes(patient, time, df_timing_calculations):
     return result
 
     #Clever functions that get anaesthetic agent and stages
-def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details):
+def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     if volatile == 'S':
-        if isETSev(patient, time):
+        if isETSev(patient, time, timing_calculations):
             result = monitor_data.loc[time]['FeAA']
         else:
             sev = anaesthetic_details.loc[time]['Sevo ET']
             result = sev
     elif volatile == 'D':
-        if isETDes(patient, time):
+        if isETDes(patient, time, timing_calculations):
             result =  monitor_data.loc[time]['FeAA']
         else:
             des = anaesthetic_details.loc[time]['Des ET']
@@ -266,15 +266,15 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details):
 
 
 
-def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details):
+def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     if volatile == 'S':
-        if isETSev(patient, time):
+        if isETSev(patient, time, timing_calculations):
             result = monitor_data.loc[time]['FiAA']
         else:
             sev = anaesthetic_details.loc[time]['Sevo Fi']
             result = sev
     elif volatile == 'D':
-        if isETDes(patient, time):
+        if isETDes(patient, time, timing_calculations):
             result = monitor_data.loc[time]['FiAA']
         else:
             des = anaesthetic_details.loc[time]['Des Fi']
