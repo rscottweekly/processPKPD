@@ -25,7 +25,8 @@ strForTime = datetime.datetime.strftime(datetime.datetime.now(),"%Y%m%d_%H%M%S" 
 
 out_filename_full = os.path.join(settings.base_dir,dir_output,strForTime+"_full_process.csv")
 out_filename_plasma = os.path.join(settings.base_dir,dir_output,strForTime+"_plasma_only")
-
+out_filename_template_individual = os.path.join(settings.base_dir,dir_output,"individual/%_process.csv")
+out_filename_covariates = os.path.join(settings.base_dir,dir_output,"strForTime_covariates.csv")
 
 const_R = 8.314462175 #L kPa K-1 mol -1
 const_T37 =  310.15 #K

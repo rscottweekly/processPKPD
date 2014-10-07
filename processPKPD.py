@@ -9,5 +9,8 @@ coding_info = load_coding_data()
 #convert_bis_full(coding_info, False)
 #convert_monitordata_full(coding_info, False)
 
-#full_calculation(coding_info)
-full_calc(coding_info)
+#full_calc(coding_info)
+#onlyPlasmaSamples(coding_info)
+#individual_patient(coding_info)
+
+processCovariates(coding_info)

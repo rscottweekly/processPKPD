@@ -376,11 +376,11 @@ def calcAAGrad(patient, df_bloods, patm, coding_info):
     else:
         return np.nan
 
-def calcDeadspace(patient, df_bloods, etCO2, coding_info):
+def calcDeadspace(patient, df_bloods, coding_info):
     #Using Bohr Equation
     if not no_abg(patient, coding_info):
         PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
-        PeCO2 = etCO2
+        PeCO2 = float(df_bloods.loc[patient]['EtCO2'])
         return (PaCO2-PeCO2)/PaCO2
     else:
         return np.nan
