@@ -287,10 +287,29 @@ def processCovariates(coding_information):
             row['PresenceCNB'] = processors.getIsCNB(patient, df_general_info)
 
             row['NumPlasmaSamples'] = processors.getNumPlasmaSamples(patient, df_plasma)
-
             row['MonitorSamples'] = processors.getNumMonitorSamples(monitor_data)
 
             row['OpType'] = processors.getOpType(patient, df_general_info)
+            row['DurationOp'] = processors.getDurationOp(patient, df_timing_calculations)
 
-            #print row
+            row['BaselineMAP'] = baselineMAP = processors.getBaselineMAP(patient, df_general_info)
+
+            row['TimeBP<90pct'] = str(processors.calcTimeSpanBelow(monitor_data, "P1mean", 0.9 * baselineMAP, 20.0))
+            row['TimeBP<80pct'] = str(processors.calcTimeSpanBelow(monitor_data, "P1mean", 0.8 * baselineMAP, 20.0))
+            row['TimeBP<70pct'] = str(processors.calcTimeSpanBelow(monitor_data, "P1mean", 0.7 * baselineMAP, 20.0))
+            row['TimeBP<60pct'] = str(processors.calcTimeSpanBelow(monitor_data, "P1mean", 0.6 * baselineMAP, 20.0))
+
+            row['TimeTemp<370'] = str(processors.calcTimeSpanBelow(monitor_data, "T1", 37.0, 32.0))
+            row['TimeTemp<365'] = str(processors.calcTimeSpanBelow(monitor_data, "T1", 36.5, 32.0))
+            row['TimeTemp<360'] = str(processors.calcTimeSpanBelow(monitor_data, "T1", 36.0, 32.0))
+            row['TimeTemp<355'] = str(processors.calcTimeSpanBelow(monitor_data, "T1", 35.5, 32.0))
+
+            row['TimeSpO2<95'] = str(processors.calcTimeSpanBelow(monitor_data, "SpO2", 95, 0))
+            row['TimeSpO2<90'] = str(processors.calcTimeSpanBelow(monitor_data, "SpO2", 90, 0))
+
+            out_lines.append(row)
+
+    out_final = pd.DataFrame(out_lines)
+    out_final.to_csv(settings.out_filename_covariates)
+
 

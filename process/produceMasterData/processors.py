@@ -1,6 +1,7 @@
 __author__ = 'rscottweekly'
 
 import datetime
+import time
 import re
 
 import pandas as pd
@@ -524,4 +525,38 @@ def getOpType(patient, general_info):
 
     return result
 
+
+def getDurationOp(patient, df_timing_calculations):
+    timing = getTimeRangeForPatient(patient, df_timing_calculations)
+    return (timing.max() - timing.min()).seconds / 60
+
+
+def getBaselineMAP(patient, general_info):
+    bp = general_info.loc[patient]['Preinduction BP']
+    bp_split = bp.split("/")
+    sbp = int(bp_split[0])
+    dbp = int(bp_split[1])
+    return int(dbp + (sbp - dbp) / 3)
+
+
+def calcTimeSpanBelow(monitor_data, col, value, excl_value):
+    timeCount = datetime.datetime.fromtimestamp(0)
+    monitor_data['tvalue'] = monitor_data.index
+    monitor_data['tnext'] = (monitor_data['tvalue'].shift()).fillna(0)
+
+    for index, row in monitor_data.iterrows():
+        try:
+            val = float(row[col])
+        except:
+            continue
+        if val < value:
+            if val > excl_value:
+                timeDelta = row['tvalue'] - row['tnext']
+                if timeDelta.seconds > 60:
+                    print index
+                    print timeDelta.seconds
+                timeCount = timeCount + timeDelta
+
+    diff = int((timeCount - datetime.datetime.fromtimestamp(0)).seconds / 60)
+    return diff
 
