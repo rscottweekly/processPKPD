@@ -26,7 +26,7 @@ strForTime = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d_%H%M%S"
 out_filename_full = os.path.join(settings.base_dir, dir_output, strForTime + "_full_process.csv")
 out_filename_plasma = os.path.join(settings.base_dir, dir_output, strForTime + "_plasma_only.csv")
 out_filename_template_individual = os.path.join(settings.base_dir, dir_output, "individual/%_process.csv")
-out_filename_covariates = os.path.join(settings.base_dir, dir_output, "strForTime_covariates.csv")
+out_filename_covariates = os.path.join(settings.base_dir, dir_output, strForTime + "_covariates.csv")
 
 const_R = 8.314462175  # L kPa K-1 mol -1
 const_T37 = 310.15  # K
@@ -38,3 +38,8 @@ out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'S
             'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI', 'BSA', 'GFR', 'AaGradient', 'DeadSpace', 'Group',
             'HasPlasma']
 
+covariate_cols = ['PatientID', 'Group', 'HasPlasma', 'ASA', 'AaGradient', 'Age', 'BMI', 'BSA', 'BaselineMAP',
+                  'Creatinine',
+                  'DeadSpace', 'DurationOp', 'GFR', 'Height', 'IBW', 'MonitorSamples', 'NumPlasmaSamples', 'OpType',
+                  'PresenceCNB', 'Sex', 'TimeBP<60pct', 'TimeBP<70pct', 'TimeBP<80pct', 'TimeBP<90pct', 'TimeSpO2<90',
+                  'TimeSpO2<95', 'TimeTemp<355', 'TimeTemp<360', 'TimeTemp<365', 'TimeTemp<370', 'Weight']

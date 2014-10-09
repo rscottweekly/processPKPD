@@ -542,19 +542,22 @@ def getBaselineMAP(patient, general_info):
 def calcTimeSpanBelow(monitor_data, col, value, excl_value):
     timeCount = datetime.datetime.fromtimestamp(0)
     monitor_data['tvalue'] = monitor_data.index
-    monitor_data['tnext'] = (monitor_data['tvalue'].shift()).fillna(0)
+    monitor_data['tnext'] = (monitor_data['tvalue'].shift(-1)).fillna(method='ffill')
 
     for index, row in monitor_data.iterrows():
+        timeDelta = row['tnext'] - row['tvalue']
+        if timeDelta.seconds > 60:
+            print index
+            print timeDelta.seconds
+            print row['tvalue']
+            print row['tnext']
+
         try:
             val = float(row[col])
         except:
             continue
         if val < value:
             if val > excl_value:
-                timeDelta = row['tvalue'] - row['tnext']
-                if timeDelta.seconds > 60:
-                    print index
-                    print timeDelta.seconds
                 timeCount = timeCount + timeDelta
 
     diff = int((timeCount - datetime.datetime.fromtimestamp(0)).seconds / 60)

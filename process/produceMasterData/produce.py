@@ -310,6 +310,8 @@ def processCovariates(coding_information):
             out_lines.append(row)
 
     out_final = pd.DataFrame(out_lines)
-    out_final.to_csv(settings.out_filename_covariates)
+    out_final.to_csv(settings.out_filename_covariates, date_format="%Y-%m-%d %H:%M", index=False,
+                     columns=settings.covariate_cols)
+
 
 
