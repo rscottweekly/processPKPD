@@ -7,13 +7,13 @@ import processors
 import sys
 
 def individual_patient(coding_information):
+    print "CALCULATING FOR INDIVIDUAL PATIENTS"
     df_timing_calculations = processors.load_timing_calcs()
 
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)
 
-    df_blood_results = pd.read_csv(settings.filename_blood_results)
-    df_blood_results.set_index(['Patient'], inplace=True)
+    df_blood_results = processors.load_blood_results()
 
     df_plasma = pd.read_csv(settings.filename_plasma, parse_dates=['Date','Time'], dayfirst=True)
     df_plasma = processors.process_plasma(df_plasma)
@@ -31,13 +31,13 @@ def individual_patient(coding_information):
                 print final.columns.values
 
 def full_calc(coding_information):
+    print "FULL PATIENT CALCULATIONS"
     df_timing_calculations = processors.load_timing_calcs()
 
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)
 
-    df_blood_results = pd.read_csv(settings.filename_blood_results)
-    df_blood_results.set_index(['Patient'], inplace=True)
+    df_blood_results = processors.load_blood_results()
 
     df_plasma = pd.read_csv(settings.filename_plasma, parse_dates=['Date','Time'], dayfirst=True)
     df_plasma = processors.process_plasma(df_plasma)
@@ -54,17 +54,16 @@ def full_calc(coding_information):
             final_lines.append(row2)
 
     final = pd.DataFrame(final_lines)
-    out_cols = ['PatientID','Time','TotalTimeElapsed','StageSevo','StageDes','StageElapsedSevo','StageElapsedDes','DoseDes','DoseDes_DS','DoseSevo','DoseSevo_DS','PlasmaSevo','PlasmaDes','EtSevo','EtDes','BIS','MAP','Age', 'Sex', 'ASA', 'Weight','Height','BMI','BSA','GFR','AaGradient','DeadSpace']
-    final.to_csv(settings.out_filename_full, dateformat="%Y-%m-%d %H:%M", index=False, columns=out_cols)
+    final.to_csv(settings.out_filename_full, dateformat="%Y-%m-%d %H:%M", index=False, columns=settings.out_cols)
 
 def onlyPlasmaSamples(coding_information):
+    print "PLASMA SAMPLE ONLY CALCUALTIONS"
     df_timing_calculations = processors.load_timing_calcs()
 
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)
 
-    df_blood_results = pd.read_csv(settings.filename_blood_results)
-    df_blood_results.set_index(['Patient'], inplace=True)
+    df_blood_results = processors.load_blood_results()
 
     df_plasma = pd.read_csv(settings.filename_plasma, parse_dates=['Date','Time'], dayfirst=True)
     df_plasma = processors.process_plasma(df_plasma)
@@ -82,8 +81,7 @@ def onlyPlasmaSamples(coding_information):
             final_lines.append(row2)
 
     final = pd.DataFrame(final_lines)
-    out_cols = ['PatientID','Time','TotalTimeElapsed','StageSevo','StageDes','StageElapsedSevo','StageElapsedDes','DoseDes','DoseDes_DS','DoseSevo','DoseSevo_DS','PlasmaSevo','PlasmaDes','EtSevo','EtDes','BIS','MAP','Age', 'Sex', 'ASA', 'Weight','Height','BMI','BSA','GFR','AaGradient','DeadSpace']
-    final.to_csv(settings.out_filename_plasma, dateformat="%Y-%m-%d %H:%M", index=False, columns=out_cols)
+    final.to_csv(settings.out_filename_plasma, dateformat="%Y-%m-%d %H:%M", index=False, columns=settings.out_cols)
 
 def processPatient(patient, patient_row, df_general_info, df_blood_results, df_timing_calculations, coding_information, df_plasma):
     print "-------------------------------PATIENT "+patient+"--------------------------------"
@@ -135,6 +133,8 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 height = df_general_info.loc[patient]['Height']
                 weight = df_general_info.loc[patient]['Weight']
                 age = df_general_info.loc[patient]['Age']
+                row['HasPlasma'] = processors.getIsPlasmaOnly(patient, coding_information)
+                row['Group'] = processors.getGroup(patient, df_timing_calculations)
                 row['Sex'] = df_general_info.loc[patient]['Sex']
                 row['Age'] = "%0.0f"%age
                 row['Weight'] = "%0.0f"%weight
@@ -143,7 +143,8 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 row['BSA'] = "%0.1f"%processors.calcBSAMosteller(weight,height)
                 row['ASA'] = "%0f"%(df_general_info.loc[patient]['ASA'])
                 if not processors.no_abg(patient, coding_information):
-                    row['AaGradient'] = "%0.0f"%processors.calcAAGrad(patient, df_blood_results, float(monitor_data.loc[time]['Pamb']), coding_information)
+                    row['AaGradient'] = "%0.0f" % processors.calcAAGrad(patient, df_blood_results, monitor_data,
+                                                                        coding_information)
                     #deadspace = processors.calcDeadspace(patient, df_blood_results, coding_information)
                     deadspace = 0.0 #TODO: remove this when it's we have etco2s
                     row['DeadSpace'] = "%0.2f"%deadspace
@@ -151,7 +152,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                     row['AaGradient'] = np.NaN
                     row['DeadSpace'] = np.NaN
 
-                creatinine = df_blood_results.loc[patient]['Creatinine']
+                creatinine = float(df_blood_results.loc[patient]['Creatinine'])
                 row['Creatinine'] = "%0.2f"%creatinine
                 row['GFR'] = "%0.0f"%processors.calcGFR(age, weight, row['Sex'], creatinine)
                 first_row_for_patient = False
@@ -167,29 +168,32 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
 
             try:
                 row['DoseSevo'] = "%0.1f"%processors.calc_volatile(60, anaesthetic_details.loc[time]['vt']* anaesthetic_details.loc[time]['f'], etaa_sev, fiaa_sev, pbar, settings.const_R, settings.const_T37)
-                #TODO: Fix when deadspace is back
-                row['DoseSevo_DS'] = 0.0
-                #row['DoseSevo_DS'] = "%0.1f"%processors.calc_volatile(60, processors.correctVtforDeadSpace(anaesthetic_details.loc[time]['vt'],deadspace)* anaesthetic_details.loc[time]['f'], etaa_sev, fiaa_sev, pbar, settings.const_R, settings.const_T37)
             except:
                 exc_info = sys.exc_info()
                 print time
                 raise exc_info[0], exc_info[1], exc_info[2]
-            #row['MixedExpired_Sev'] = "%0.2f"%calc_mixed_exp(etaa_sev, )
 
             etaa_des = processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details, df_timing_calculations) / 100
             fiaa_des = processors.getFiAA(patient, time, 'D', monitor_data, anaesthetic_details, df_timing_calculations) / 100
 
             row['DoseDes'] = "%0.1f"%processors.calc_volatile(60, anaesthetic_details.loc[time]['vt']* anaesthetic_details.loc[time]['f'], etaa_des, fiaa_des, pbar, settings.const_R, settings.const_T37)
-            #TODO: fix when deadspace is back
-            row['DoseDes_DS'] = 0.0
-            #row['DoseDes_DS'] = "%0.1f"%processors.calc_volatile(60, processors.correctVtforDeadSpace(anaesthetic_details.loc[time]['vt'],deadspace)* anaesthetic_details.loc[time]['f'], etaa_des, fiaa_des, pbar, settings.const_R, settings.const_T37)
 
             if not processors.no_abg(patient,coding_information):
+                row['DoseSevo_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
+                    anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_sev,
+                                                                        fiaa_sev, pbar, settings.const_R,
+                                                                        settings.const_T37)
+                row['DoseDes_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
+                    anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_des,
+                                                                       fiaa_des, pbar, settings.const_R,
+                                                                       settings.const_T37)
                 row['PlasmaSevo'] = processors.formatOrNAN(processors.getPlasmaAA(patient, time, 'S', df_plasma), "0.1f")
                 row['PlasmaDes'] = processors.formatOrNAN(processors.getPlasmaAA(patient, time, 'D', df_plasma), "0.1f")
             else:
                 row['PlasmaSevo'] = np.NaN
-                row['PlasmaDes'] = np.NAN
+                row['PlasmaDes'] = np.NaN
+                row['DoseSevo_DS'] = np.NaN
+                row['DoseDes_DS'] = np.NaN
 
             row['EtSevo'] = processors.getEtAA(patient, time, 'S', monitor_data, anaesthetic_details, df_timing_calculations)
             row['EtDes'] = processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details, df_timing_calculations)
@@ -216,8 +220,7 @@ def processCovariates(coding_information):
     df_general_info = pd.read_csv(settings.filename_general_info)
     df_general_info.set_index(['Patient'], inplace=True)
 
-    df_blood_results = pd.read_csv(settings.filename_blood_results)
-    df_blood_results.set_index(['Patient'], inplace=True)
+    df_blood_results = processors.load_blood_results()
 
     df_plasma = pd.read_csv(settings.filename_plasma, parse_dates=['Date','Time'], dayfirst=True)
     df_plasma = processors.process_plasma(df_plasma)
@@ -225,10 +228,36 @@ def processCovariates(coding_information):
     out_lines = []
     for index, patient_row in coding_information.iterrows():
         patient = index
-        row = {}
-        row['PatientID'] = patient
-        row['Age'] = df_general_info.loc(patient)['Age']
-        row['Weight'] = df_general_info.loc(patient)['Weight']
+        if patient_row['ExcludeAll'] == 'N':
 
-        print row
+            monitor_data = processors.load_monitor_data(patient)
+            anaesthetic_details = processors.load_anaesthetic_details(patient)
+
+            row = {}
+            row['PatientID'] = patient
+            row['Group'] = processors.getGroup(patient, df_timing_calculations)
+            row['HasPlasma'] = processors.getIsPlasmaOnly(patient, coding_information)
+            row['Age'] = age = df_general_info.loc[patient]['Age']
+            row['Sex'] = sex = df_general_info.loc[patient]['Sex']
+            row['Weight'] = weight = df_general_info.loc[patient]['Weight']
+            row['Height'] = height = df_general_info.loc[patient]['Height']
+            row['BMI'] = processors.calcBMI(weight, height)
+            row['BSA'] = processors.calcBSAMosteller(weight, height)
+            # TODO: calc IBW
+            row['IBW'] = np.NaN
+            row['ASA'] = df_general_info.loc[patient]['ASA']
+            if not processors.no_abg(patient, coding_information):
+                row['AaGradient'] = "%0.0f" % processors.calcAAGrad(patient, df_blood_results, monitor_data,
+                                                                    coding_information)
+                row['DeadSpace'] = deadspace = processors.calcDeadspace(patient, df_blood_results, monitor_data,
+                                                                        coding_information)
+            else:
+                row['AaGradient'] = np.NaN
+                row['DeadSpace'] = np.NaN
+
+            row['Creatinine'] = creatinine = df_blood_results.loc[patient]['Creatinine']
+            row['GFR'] = processors.calcGFR(age, weight, sex, creatinine)
+
+            # row['PresenceCNB'] =
+            print row
 

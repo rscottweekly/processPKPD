@@ -5,7 +5,6 @@ import datetime
 import numpy as np
 import settings
 import re
-import time
 
 
 
@@ -243,6 +242,7 @@ def isETDes(patient, time, df_timing_calculations):
 
     #Clever functions that get anaesthetic agent and stages
 def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
+    result = 0.0
     if volatile == 'S':
         if isETSev(patient, time, timing_calculations):
             result = monitor_data.loc[time]['FeAA']
@@ -272,6 +272,7 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
 
 
 def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
+    result = 0.0
     if volatile == 'S':
         if isETSev(patient, time, timing_calculations):
             result = monitor_data.loc[time]['FiAA']
@@ -366,21 +367,30 @@ def no_abg(patient, coding_info):
     else:
         return False
 
-def calcAAGrad(patient, df_bloods, patm, coding_info):
+
+def calcAAGrad(patient, df_bloods, df_monitor_data, coding_info):
     if not no_abg(patient, coding_info):
+        # print df_bloods
+        the_time = df_bloods.loc[patient]['DateTime']
+        FiO2 = float(df_monitor_data.loc[the_time]['FiO2']) / 100
+        patm = float(df_monitor_data.loc[the_time]['Pamb'])
         paO2 = float(df_bloods.loc[patient]['PaO2'])
-        FiO2 = float(df_bloods.loc[patient]['FiO2'])
         PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
         pAO2 = FiO2*(patm-settings.const_PH2OmmHg)-PaCO2/0.8
         return pAO2 - paO2
     else:
         return np.nan
 
-def calcDeadspace(patient, df_bloods, coding_info):
+
+def calcDeadspace(patient, df_bloods, df_monitor_data, coding_info):
     #Using Bohr Equation
     if not no_abg(patient, coding_info):
+        the_time = df_bloods.loc[patient]['DateTime']
+        EtCO2 = float(
+            df_monitor_data.loc[the_time]['EtCO2']) * 7.5  # for some reason, the monitor data gives co2 in kPa
+
         PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
-        PeCO2 = float(df_bloods.loc[patient]['EtCO2'])
+        PeCO2 = EtCO2
         return (PaCO2-PeCO2)/PaCO2
     else:
         return np.nan
@@ -419,3 +429,38 @@ def calcGFR(age, weight, gender, creatinine ):
         return gfr * 0.85
     else:
         return gfr
+
+
+# it's a really long story why this is here, don't try to think about it too hard, it will hurt your brains
+def strptimeme(val):
+    try:
+        # print val
+        return datetime.datetime.strptime(val, "%d/%m/%y %H:%M:%S")
+    except:
+        return datetime.datetime.now()
+
+
+def load_blood_results():
+    fix_time = lambda x: strptimeme(x)
+
+    df_blood_results = pd.read_csv(settings.filename_blood_results, parse_dates={'DateTime': [1, 11]},
+                                   index_col='Patient', dayfirst=True)
+    df_blood_results['DateTime'] = df_blood_results['DateTime'].apply(fix_time)
+
+    return df_blood_results
+
+
+def getIsPlasmaOnly(patient, df_coding_information):
+    if df_coding_information.loc[patient]['HasBloods'] == 'Y':
+        return "Y"
+    else:
+        return "N"
+
+
+def getGroup(patient, df_timing_calculations):
+    if isPatientAlwaysDes(patient, df_timing_calculations):
+        return "D"
+    elif isPatientAlwaysSev(patient, df_timing_calculations):
+        return "S"
+    else:
+        return "SD"
