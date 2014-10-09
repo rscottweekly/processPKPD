@@ -449,7 +449,7 @@ def load_timing_calcs():
 
 def calcGFR(age, weight, gender, creatinine):
     # (140-age) * (Wt in kg) * (0.85 if female) / (72 * Cr)
-    gfr = (140 - age) * weight / (72 * creatinine)
+    gfr = (140 - age) * weight * 1.23 / (creatinine)
     if gender == 'F':
         return gfr * 0.85
     else:
