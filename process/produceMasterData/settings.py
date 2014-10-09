@@ -1,8 +1,9 @@
-from process import settings
 import os
+import datetime
+
+from process import settings
 from process.MonitorData.settings import prod_dir_monitor
 from process.BIS.settings import prod_dir_bis
-import datetime
 
 
 dir_generic = "Generic Information/"

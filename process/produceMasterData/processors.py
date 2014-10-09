@@ -1,14 +1,17 @@
 __author__ = 'rscottweekly'
 
-import pandas as pd
 import datetime
-import numpy as np
-import settings
 import re
 
+import pandas as pd
+import numpy as np
+
+import settings
 
 
-#Processes the plasma values file and corrects the unit error in the file
+
+
+# Processes the plasma values file and corrects the unit error in the file
 def process_plasma(df_plasma):
     df_plasma = df_plasma[pd.notnull(df_plasma['Time'])]
     combine = lambda x: datetime.datetime.combine(x['Date'].to_datetime().date(), x['Time'].to_datetime().time())
@@ -25,9 +28,10 @@ def process_plasma(df_plasma):
 
     return df_plasma
 
+
 #Returns either a formatted number or a nan if the value is null
 def formatOrNAN(value, formatter):
-    formatter = "{:"+formatter+"}"
+    formatter = "{:" + formatter + "}"
     #print formatter
     if pd.notnull(value):
         return formatter.format(value)
@@ -37,20 +41,21 @@ def formatOrNAN(value, formatter):
 
 #functions for loading individual patient data
 def load_monitor_data(patient):
-    filename = settings.filename_template_monitor.replace("%",str(patient))
+    filename = settings.filename_template_monitor.replace("%", str(patient))
     print filename
     df = pd.read_csv(filename, parse_dates=['Time'], index_col=0)
     return df
+
 
 def process_vent_data(df_anaesthetic_details):
     #Iterate through the rows until get to the first ventilation setting then back fill it to first item
     i = 0
     val_found = False
-    while ((i < len(df_anaesthetic_details.index)) and not(val_found)):
+    while ((i < len(df_anaesthetic_details.index)) and not (val_found)):
         if pd.notnull(df_anaesthetic_details.iloc[i]['Ventilation']):
             val_found = True
         else:
-            i+=1
+            i += 1
 
     vent_column = df_anaesthetic_details.columns.get_loc('Ventilation')
 
@@ -61,17 +66,17 @@ def process_vent_data(df_anaesthetic_details):
     if val_found == False:
         raise NameError("No Ventilation data found for patient")
     else:
-        df_anaesthetic_details.iat[0,vent_column] = df_anaesthetic_details.iloc[i]['Ventilation']
+        df_anaesthetic_details.iat[0, vent_column] = df_anaesthetic_details.iloc[i]['Ventilation']
         df_anaesthetic_details = df_anaesthetic_details.fillna(method="ffill")
         #now build the ventilation data
         for count, row in df_anaesthetic_details.iterrows():
             vent_text = row['Ventilation']
-            if (re.search(r'\d+', vent_text)): #if there are no numbers, it probably says extubation or other comment
+            if (re.search(r'\d+', vent_text)):  # if there are no numbers, it probably says extubation or other comment
                 splits = vent_text.split(',')
-                if('x' in splits[0]):
+                if ('x' in splits[0]):
                     #this is ventilation data
                     (vt, f ) = splits[0].split('x')
-                    data_vt.append(float(vt)/1000)
+                    data_vt.append(float(vt) / 1000)
                     data_f.append(int(f))
                     try:
                         data_peep.append(int(re.search(r'\d+', splits[1]).group()))
@@ -84,9 +89,9 @@ def process_vent_data(df_anaesthetic_details):
                     data_f.append(data_f[-1])
                     data_peep.append(int(re.search(r'\d+', splits[0]).group()))
             else:
-                    data_vt.append(np.nan)
-                    data_f.append(np.nan)
-                    data_peep.append(np.nan)
+                data_vt.append(np.nan)
+                data_f.append(np.nan)
+                data_peep.append(np.nan)
 
         df_anaesthetic_details['vt'] = data_vt
         df_anaesthetic_details['f'] = data_f
@@ -95,9 +100,9 @@ def process_vent_data(df_anaesthetic_details):
 
 
 def load_anaesthetic_details(patient):
-    filename = settings.filename_template_anaesdetails.replace("%",str(patient))
+    filename = settings.filename_template_anaesdetails.replace("%", str(patient))
     xls_anaesthetic_details = pd.ExcelFile(filename)
-    df_anaesthetic_details = pd.ExcelFile.parse(xls_anaesthetic_details,xls_anaesthetic_details.sheet_names[0])
+    df_anaesthetic_details = pd.ExcelFile.parse(xls_anaesthetic_details, xls_anaesthetic_details.sheet_names[0])
 
     date = df_anaesthetic_details.iloc[0]['Date of op']
     newdate = date.to_datetime()
@@ -110,6 +115,7 @@ def load_anaesthetic_details(patient):
 
     return df_anaesthetic_details
 
+
 def loadBISforPatient(patient):
     filename = settings.filename_template_bis.replace("%", str(patient))
 
@@ -121,6 +127,7 @@ def loadBISforPatient(patient):
 
     return df
 
+
 def getBISforTime(time, BISData):
     index = BISData.index
     if time in index:
@@ -130,31 +137,38 @@ def getBISforTime(time, BISData):
 
     return val
 
+
 #Calculation of timing
 def getETIsSevStart(patient, df_timing_calculations):
-    return processTimeforCol(patient, df_timing_calculations,'ETIsSev_Start')
+    return processTimeforCol(patient, df_timing_calculations, 'ETIsSev_Start')
+
 
 def getETIsSevEnd(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsSev_End')
 
+
 def getETIsDesStart(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_Start')
+
 
 def getETIsDesEnd(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_End')
 
+
 def getChangeTime(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ChangeTime')
 
+
 def stopVolatileTime(patient, df_timing_calculations):
-    return processTimeforCol(patient, df_timing_calculations,'StopVolatile')
+    return processTimeforCol(patient, df_timing_calculations, 'StopVolatile')
+
 
 def processTimeforCol(patient, df_timing_calculations, col):
     row = df_timing_calculations.loc[patient]
-    if not (row[col] == np.nan or type(row[col])==pd.tslib.NaTType):
+    if not (row[col] == np.nan or type(row[col]) == pd.tslib.NaTType):
         #there must be an easier way...
         the_time = datetime.time(*row[col].to_pydatetime().timetuple()[3:6])
-        return datetime.datetime.combine(row['DateTime'],the_time)
+        return datetime.datetime.combine(row['DateTime'], the_time)
 
 
 def isPatientAlwaysSev(patient, df_timing_calculations):
@@ -164,6 +178,7 @@ def isPatientAlwaysSev(patient, df_timing_calculations):
     else:
         return False
 
+
 def isPatientAlwaysDes(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
     if row['IsDesWholeTime'] == 'Y':
@@ -171,8 +186,11 @@ def isPatientAlwaysDes(patient, df_timing_calculations):
     else:
         return False
 
+
 def doesPatientSwitchVolatile(patient, df_timing_calculations):
-    return not (isPatientAlwaysDes(patient, df_timing_calculations) or isPatientAlwaysSev(patient, df_timing_calculations))
+    return not (
+        isPatientAlwaysDes(patient, df_timing_calculations) or isPatientAlwaysSev(patient, df_timing_calculations))
+
 
 def getTimeRangeForPatient(patient, df_timing_calculations):
     #print df_timing_calculations.loc[patient]
@@ -190,6 +208,7 @@ def getTimeRangeForPatient(patient, df_timing_calculations):
     #print "Case start time is {0} and end time is {1}".format(str(start_time),str(end_time))
 
     return pd.date_range(start=start_time, end=end_time, freq='1Min')
+
 
 def isETSev(patient, time, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -241,6 +260,8 @@ def isETDes(patient, time, df_timing_calculations):
     return result
 
     #Clever functions that get anaesthetic agent and stages
+
+
 def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     result = 0.0
     if volatile == 'S':
@@ -256,7 +277,7 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
             des = anaesthetic_details.loc[time]['Des ET']
             result = des
 
-    if (type(result) != np.float64) and (type(result)!= float) and (type(result)!=int):
+    if (type(result) != np.float64) and (type(result) != float) and (type(result) != int):
         try:
             result = np.float64(result)
             return result
@@ -268,7 +289,6 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
             return result
         else:
             return 0.0
-
 
 
 def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
@@ -285,7 +305,7 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
         else:
             des = anaesthetic_details.loc[time]['Des Fi']
             result = des
-    if (type(result) != np.float64) and (type(result)!= float) and (type(result)!=int):
+    if (type(result) != np.float64) and (type(result) != float) and (type(result) != int):
         try:
             result = np.float64(result)
             return result
@@ -298,18 +318,17 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
         else:
             return 0.0
 
+
 def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
         if volatile == 'S':
-            return df_plasma.loc[time]['Sev_mol/L']*1000000
+            return df_plasma.loc[time]['Sev_mol/L'] * 1000000
         if volatile == 'D':
-            return df_plasma.loc[time]['Des_mol/L']*1000000
-
+            return df_plasma.loc[time]['Des_mol/L'] * 1000000
 
 
 #Calculates Stages
 def getStage(patient, time, volatile, df_timing_calculations):
-
     times = getTimeRangeForPatient(patient, df_timing_calculations)
 
     change_over = getChangeTime(patient, df_timing_calculations)
@@ -336,8 +355,9 @@ def getStage(patient, time, volatile, df_timing_calculations):
             return "1C"
 
 
-def calc_amt (p, v, r, t):
-    return (p*v)/(r*t)
+def calc_amt(p, v, r, t):
+    return (p * v) / (r * t)
+
 
 def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
     #print  "Time %i" % time_s
@@ -349,20 +369,23 @@ def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
     #print t
 
     pamb = pbar - settings.const_PH2O
-    period_vol = (time_s/60)*min_vol
-    fe_amt = calc_amt(pamb*fe, period_vol, r, t)
-    fi_amt = calc_amt(pamb*fi, period_vol, r, t)
-    return (fi_amt-fe_amt)*1000000
+    period_vol = (time_s / 60) * min_vol
+    fe_amt = calc_amt(pamb * fe, period_vol, r, t)
+    fi_amt = calc_amt(pamb * fi, period_vol, r, t)
+    return (fi_amt - fe_amt) * 1000000
+
 
 def calcBMI(weight, height):
     height = height / 100.0
-    return weight/(height*height)
+    return weight / (height * height)
+
 
 def calcBSAMosteller(weight, height):
-    return (height * weight / 36)**0.5
+    return (height * weight / 36) ** 0.5
+
 
 def no_abg(patient, coding_info):
-    if coding_info.loc[patient]['NoABG']=='Y':
+    if coding_info.loc[patient]['NoABG'] == 'Y':
         return True
     else:
         return False
@@ -376,7 +399,7 @@ def calcAAGrad(patient, df_bloods, df_monitor_data, coding_info):
         patm = float(df_monitor_data.loc[the_time]['Pamb'])
         paO2 = float(df_bloods.loc[patient]['PaO2'])
         PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
-        pAO2 = FiO2*(patm-settings.const_PH2OmmHg)-PaCO2/0.8
+        pAO2 = FiO2 * (patm - settings.const_PH2OmmHg) - PaCO2 / 0.8
         return pAO2 - paO2
     else:
         return np.nan
@@ -391,21 +414,21 @@ def calcDeadspace(patient, df_bloods, df_monitor_data, coding_info):
 
         PaCO2 = float(df_bloods.loc[patient]['PaCO2'])
         PeCO2 = EtCO2
-        return (PaCO2-PeCO2)/PaCO2
+        return (PaCO2 - PeCO2) / PaCO2
     else:
         return np.nan
 
+
 def correctVtforDeadSpace(vt, deadspace):
-    return vt-(deadspace*vt)
+    return vt - (deadspace * vt)
 
 
 def load_timing_calcs():
-
     def fixtime(col):
         #This lambda tests if the passed value is a string, it it is, it strptimes it, otherwise it returns a nan
-        fix_time = lambda x: datetime.datetime.strptime(x,"%H:%M") if isinstance(x, basestring) else np.nan
+        fix_time = lambda x: datetime.datetime.strptime(x, "%H:%M") if isinstance(x, basestring) else np.nan
 
-        df_timing_calculations[col]= df_timing_calculations[col].apply(fix_time)
+        df_timing_calculations[col] = df_timing_calculations[col].apply(fix_time)
 
     df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
     df_timing_calculations.set_index(['Patient'], inplace=True)
@@ -422,9 +445,10 @@ def load_timing_calcs():
     return df_timing_calculations
     #ETIsSev_End	ETIsDes_Start	ETIsDes_End']
 
-def calcGFR(age, weight, gender, creatinine ):
+
+def calcGFR(age, weight, gender, creatinine):
     # (140-age) * (Wt in kg) * (0.85 if female) / (72 * Cr)
-    gfr = (140-age) * weight / (72 * creatinine)
+    gfr = (140 - age) * weight / (72 * creatinine)
     if gender == 'F':
         return gfr * 0.85
     else:
@@ -464,3 +488,40 @@ def getGroup(patient, df_timing_calculations):
         return "S"
     else:
         return "SD"
+
+
+def getIsCNB(patient, df_general_information):
+    regional = df_general_information.loc[patient]['Regional block']
+    strs = ["Epidural", "SAB", "Spinal"]
+    if any(x in regional for x in strs):
+        return 'Y'
+
+
+def getNumPlasmaSamples(patient, df_plasma):
+    rows = df_plasma[df_plasma['Patient'] == patient]
+    return len(rows)
+
+
+def getNumMonitorSamples(df_monitor):
+    return len(df_monitor)
+
+
+def getOpType(patient, general_info):
+    operation = general_info.loc[patient]['Opeartion']
+
+    types = {'bileduct': ['Bile'], 'pancreatic': ['Pancreatic'],
+             'colectomy': ['colectomy', 'AP', 'Anterior resection', 'anterior resection', 'APR'],
+             'liver': ['Liver', 'Hepatic'], 'expLap': ['laparotomy'], 'oesph': ['Ivor']}
+
+    result = ""
+    for title, vals in types.items():
+        if any(x in operation for x in vals):
+            result = title
+
+    if result == "":
+        print operation
+        result = "other"
+
+    return result
+
+
