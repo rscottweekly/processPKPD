@@ -299,42 +299,42 @@ def processCovariates(coding_information):
             timeBP90pct = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "P1mean",
                                                        0.9 * baselineMAP, 20.0)
             row['TimeBP<90pct'] = str(timeBP90pct)
-            row['PctTimeBP<90pct'] = timeBP90pct / row['DurationOp']
+            row['PctTimeBP<90pct'] = 100 * timeBP90pct / row['DurationOp']
 
             timeBP80pct = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "P1mean",
                                                        0.8 * baselineMAP, 20.0)
             row['TimeBP<80pct'] = str(timeBP80pct)
-            row['PctTimeBP<80pct'] = timeBP80pct / row['DurationOp']
+            row['PctTimeBP<80pct'] = 100 * timeBP80pct / row['DurationOp']
 
             timeBP70pct = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "P1mean",
                                                        0.7 * baselineMAP, 20.0)
             row['TimeBP<70pct'] = str(timeBP70pct)
-            row['PctTimeBP<70pct'] = timeBP70pct / row['DurationOp']
+            row['PctTimeBP<70pct'] = 100 * timeBP70pct / row['DurationOp']
 
             timeBP60pct = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "P1mean",
                                                        0.6 * baselineMAP, 20.0)
             row['TimeBP<60pct'] = str(timeBP60pct)
-            row['PctTimeBP<60pct'] = timeBP60pct / row['DurationOp']
+            row['PctTimeBP<60pct'] = 100 * timeBP60pct / row['DurationOp']
 
             timeTemp37 = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "T1", 37.0, 32.0)
             row['TimeTemp<370'] = str(timeTemp37)
-            row['PctTimeTemp<370'] = timeTemp37 / row['DurationOp']
+            row['PctTimeTemp<370'] = 100 * timeTemp37 / row['DurationOp']
 
             timeTemp365 = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "T1", 36.5, 32.0)
             row['TimeTemp<365'] = str(timeTemp365)
-            row['PctTimeTemp<365'] = timeTemp365 / row['DurationOp']
+            row['PctTimeTemp<365'] = 100 * timeTemp365 / row['DurationOp']
 
             timeTemp36 = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "T1", 36.0, 32.0)
             row['TimeTemp<360'] = str(timeTemp36)
-            row['PctTimeTemp<360'] = timeTemp36 / row['DurationOp']
+            row['PctTimeTemp<360'] = 100 * timeTemp36 / row['DurationOp']
 
             timeSpO295 = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "SpO2", 95, 0)
             row['TimeSpO2<95'] = str(timeSpO295)
-            row['PctTimeSpO2<95'] = timeSpO295 / row['DurationOp']
+            row['PctTimeSpO2<95'] = 100 * timeSpO295 / row['DurationOp']
 
             timeSpO290 = processors.calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, "SpO2", 90, 0)
             row['TimeSpO2<90'] = str(timeSpO290)
-            row['PctTimeSpO2<90'] = timeSpO290 / row['DurationOp']
+            row['PctTimeSpO2<90'] = 100 * timeSpO290 / row['DurationOp']
 
             out_lines.append(row)
 

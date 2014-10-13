@@ -39,7 +39,9 @@ out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'S
             'HasPlasma']
 
 covariate_cols = ['PatientID', 'Group', 'HasPlasma', 'ASA', 'AaGradient', 'Age', 'BMI', 'BSA', 'BaselineMAP',
-                  'Creatinine',
-                  'DeadSpace', 'DurationOp', 'GFR', 'Height', 'IBW', 'MonitorSamples', 'NumPlasmaSamples', 'OpType',
+                  'Creatinine', 'DeadSpace', 'DurationOp', 'GFR', 'Height', 'IBW', 'MonitorSamples',
+                  'NumPlasmaSamples', 'OpType', 'PctTimeBP<60pct', 'PctTimeBP<70pct', 'PctTimeBP<80pct',
+                  'PctTimeBP<90pct', 'PctTimeSpO2<90', 'PctTimeSpO2<95', 'PctTimeTemp<360', 'PctTimeTemp<365',
+                  'PctTimeTemp<370',
                   'PresenceCNB', 'Sex', 'TimeBP<60pct', 'TimeBP<70pct', 'TimeBP<80pct', 'TimeBP<90pct', 'TimeSpO2<90',
-                  'TimeSpO2<95', 'TimeTemp<355', 'TimeTemp<360', 'TimeTemp<365', 'TimeTemp<370', 'Weight']
+                  'TimeSpO2<95', 'TimeTemp<360', 'TimeTemp<365', 'TimeTemp<370', 'Weight']
