@@ -449,7 +449,7 @@ def load_timing_calcs():
 
 def calcGFR(age, weight, gender, creatinine):
     # (140-age) * (Wt in kg) * (0.85 if female) / (72 * Cr)
-    gfr = (140 - age) * weight * 1.23 / (creatinine)
+    gfr = ((140 - age) * weight * 1.23) / (creatinine)
     if gender == 'F':
         return gfr * 0.85
     else:
@@ -477,9 +477,9 @@ def load_blood_results():
 
 def getIsPlasmaOnly(patient, df_coding_information):
     if df_coding_information.loc[patient]['HasBloods'] == 'Y':
-        return "Y"
+        return "0"
     else:
-        return "N"
+        return "1"
 
 
 def getGroup(patient, df_timing_calculations):
@@ -539,12 +539,13 @@ def getBaselineMAP(patient, general_info):
     return int(dbp + (sbp - dbp) / 3)
 
 
-def calcTimeSpanBelow(monitor_data, col, value, excl_value):
+def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value, excl_value):
     timeCount = datetime.datetime.fromtimestamp(0)
     monitor_data['tvalue'] = monitor_data.index
     monitor_data['tnext'] = (monitor_data['tvalue'].shift(-1)).fillna(method='ffill')
 
-    for index, row in monitor_data.iterrows():
+    for the_time in getTimeRangeForPatient(patient, df_timing_calculations):
+        row = monitor_data.loc[the_time]
         timeDelta = row['tnext'] - row['tvalue']
         if timeDelta.seconds > 60:
             print index
