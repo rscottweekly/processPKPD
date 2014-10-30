@@ -238,6 +238,14 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
 
             out_lines.append(row)
             #print row
+
+        for index,pl_row in df_plasma.iterrows():
+            if pl_row['Patient']==patient:
+                if pl_row['Used']==0:
+                    out_lines.append(processors.buildPlasmaOnlyRow(pl_row))
+
+
+
         return out_lines
 
 

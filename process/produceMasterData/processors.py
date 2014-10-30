@@ -26,6 +26,7 @@ def process_plasma(df_plasma):
     df_plasma['Sev_mol/L'] = df_plasma['Sev_mmol/L'] / 1000000
 
     df_plasma.set_index(['DateTime'], inplace=True)
+    df_plasma['Used'] = 0
 
     return df_plasma
 
@@ -322,6 +323,7 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
 
 def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
+        df_plasma.loc[time,'Used']=1
         if volatile == 'S':
             return df_plasma.loc[time]['Sev_mol/L'] * 1000000
         if volatile == 'D':
@@ -564,3 +566,14 @@ def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value,
     diff = int((timeCount - datetime.datetime.fromtimestamp(0)).seconds / 60)
     return diff
 
+def buildPlasmaOnlyRow(plasmaData):
+    out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
+        'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
+        'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
+        'BSA', 'GFR', 'AaGradient', 'DeadSpace']
+
+    row = dict.fromkeys(out_cols, "")
+
+    row['PatientID'] = plasmaData['Patient']
+
+    row['Time'] = plasmaData['Time']
