@@ -436,17 +436,15 @@ def load_timing_calcs():
     df_timing_calculations = pd.read_csv(settings.filename_mastertimingcalculations, parse_dates=[1])
     df_timing_calculations.set_index(['Patient'], inplace=True)
 
-    #df_timing_calculations['ETIsSev_Start']= df_timing_calculations['ETIsSev_Start'].apply(fix_time)
-
     fixtime('ETIsSev_Start')
     fixtime('ETIsSev_End')
     fixtime('ETIsDes_Start')
     fixtime('ETIsDes_End')
+    fixtime('No_ETSev_After')
     fixtime('ChangeTime')
     fixtime('StopVolatile')
 
     return df_timing_calculations
-    #ETIsSev_End	ETIsDes_Start	ETIsDes_End']
 
 
 def calcGFR(age, weight, gender, creatinine):
@@ -566,14 +564,22 @@ def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value,
     diff = int((timeCount - datetime.datetime.fromtimestamp(0)).seconds / 60)
     return diff
 
-def buildPlasmaOnlyRow(plasmaData):
+
+def buildPlasmaOnlyRow(plasmaData, df_plasma, df_timing_calculations):
     out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
         'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
         'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
-        'BSA', 'GFR', 'AaGradient', 'DeadSpace']
+        'BSA', 'GFR', 'AaGradient', 'DeadSpace', 'FRC', 'i_s', 'i_d']
 
     row = dict.fromkeys(out_cols, "")
 
-    row['PatientID'] = plasmaData['Patient']
+    row['PatientID'] = patientID = plasmaData['Patient']
 
-    row['Time'] = plasmaData['Time']
+    time_range = getTimeRangeForPatient(patientID, df_timing_calculations)
+
+    row['Time'] = time = plasmaData['Time']
+    row['TotalTimeElapsed'] = int((time - time_range[0]).total_seconds() / 60)
+
+    row['PlasmaSevo'] = getPlasmaAA(patientID, time, "S", df_plasma)
+
+    return row

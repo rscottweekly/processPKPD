@@ -36,7 +36,7 @@ const_PH2OmmHg = 47  # mmHg for alveolar gas eqn
 out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo', 'StageElapsedDes',
             'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo', 'PlasmaDes', 'EtSevo', 'EtDes', 'BIS',
             'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI', 'BSA', 'GFR', 'AaGradient', 'DeadSpace', 'Group',
-            'HasPlasma']
+            'HasPlasma', 'FRC', 'i_s', 'i_d']
 
 covariate_cols = ['PatientID', 'Group', 'HasPlasma', 'ASA', 'AaGradient', 'Age', 'BMI', 'BSA', 'BaselineMAP',
                   'Creatinine', 'DeadSpace', 'DurationOp', 'GFR', 'Height', 'IBW', 'MonitorSamples',
@@ -44,4 +44,4 @@ covariate_cols = ['PatientID', 'Group', 'HasPlasma', 'ASA', 'AaGradient', 'Age',
                   'PctTimeBP<90pct', 'PctTimeSpO2<90', 'PctTimeSpO2<95', 'PctTimeTemp<360', 'PctTimeTemp<365',
                   'PctTimeTemp<370',
                   'PresenceCNB', 'Sex', 'TimeBP<60pct', 'TimeBP<70pct', 'TimeBP<80pct', 'TimeBP<90pct', 'TimeSpO2<90',
-                  'TimeSpO2<95', 'TimeTemp<360', 'TimeTemp<365', 'TimeTemp<370', 'Weight']
+                  'TimeSpO2<95', 'TimeTemp<360', 'TimeTemp<365', 'TimeTemp<370', 'Weight', 'FRC']

@@ -105,6 +105,9 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
         out_lines = []
         first_row_for_patient = True
 
+        i_s = 1  # these are indexes that say whether volatile was turned off, PHOENIX will switch compartments
+        i_d = 1
+
         monitor_data = processors.load_monitor_data(patient)
         anaesthetic_details = processors.load_anaesthetic_details(patient)
         bis_data = processors.loadBISforPatient(patient)
@@ -153,6 +156,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 row['Age'] = "%0.0f" % age
                 row['Weight'] = "%0.0f" % weight
                 row['Height'] = "%0.0f" % height
+                row['FRC'] = weight * 0.03  #30ml/kg
                 row['BMI'] = "%0.1f" % processors.calcBMI(weight, height)
                 row['BSA'] = "%0.1f" % processors.calcBSAMosteller(weight, height)
                 row['ASA'] = "%0f" % (df_general_info.loc[patient]['ASA'])
@@ -242,7 +246,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
         for index,pl_row in df_plasma.iterrows():
             if pl_row['Patient']==patient:
                 if pl_row['Used']==0:
-                    out_lines.append(processors.buildPlasmaOnlyRow(pl_row))
+                    out_lines.append(processors.buildPlasmaOnlyRow(pl_row, df_plasma, df_timing_calculations))
 
 
 
@@ -275,6 +279,7 @@ def processCovariates(coding_information):
             row['Sex'] = sex = df_general_info.loc[patient]['Sex']
             row['Weight'] = weight = df_general_info.loc[patient]['Weight']
             row['Height'] = height = df_general_info.loc[patient]['Height']
+            row['FRC'] = weight * 0.03  #30ml/kg
             row['BMI'] = processors.calcBMI(weight, height)
             row['BSA'] = processors.calcBSAMosteller(weight, height)
             # TODO: calc IBW
