@@ -27,10 +27,11 @@ def individual_patient(coding_information):
                               coding_information, df_plasma)
         if line != None:
             final = pd.DataFrame(line)
-            out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
-                        'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
-                        'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
-                        'BSA', 'GFR', 'AaGradient', 'DeadSpace']
+            # out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
+            #            'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
+            #            'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
+            #            'BSA', 'GFR', 'AaGradient', 'DeadSpace', ]
+            out_cols = settings.out_cols
             try:
                 final.to_csv(settings.out_filename_template_individual.replace('%', index), dateformat="%Y-%m-%d %H:%M",
                              index=False, columns=out_cols)

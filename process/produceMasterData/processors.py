@@ -347,7 +347,7 @@ def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
     period_vol = (time_s / 60) * min_vol
     fe_amt = calc_amt(pamb * fe, period_vol, r, t)
     fi_amt = calc_amt(pamb * fi, period_vol, r, t)
-    return (fi_amt - fe_amt) * 1000000000  # return mmol/L
+    return (fi_amt - fe_amt) * 1000  # return mmol/L
 
 def calcBMI(weight, height):
     height = height / 100.0
