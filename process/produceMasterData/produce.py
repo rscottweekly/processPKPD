@@ -105,8 +105,8 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
         out_lines = []
         first_row_for_patient = True
 
-        i_s = 1  # these are indexes that say whether volatile was turned off, PHOENIX will switch compartments
-        i_d = 1
+        i_s = 0  # these are indexes that say whether volatile was turned off, PHOENIX will switch compartments
+        i_d = 0
 
         monitor_data = processors.load_monitor_data(patient)
         anaesthetic_details = processors.load_anaesthetic_details(patient)
@@ -173,6 +173,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 creatinine = float(df_blood_results.loc[patient]['Creatinine'])
                 row['Creatinine'] = "%0.2f" % creatinine
                 row['GFR'] = "%0.0f" % processors.calcGFR(age, weight, row['Sex'], creatinine)
+                row['FRC'] = "%0.0f" % processors.calcFRC(weight)
                 first_row_for_patient = False
 
             try:
@@ -200,6 +201,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                                           df_timing_calculations) / 100
             fiaa_des = processors.getFiAA(patient, time, 'D', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
+
 
             row['DoseDes'] = "%0.1f" % processors.calc_volatile(60, anaesthetic_details.loc[time]['vt'] *
                                                                 anaesthetic_details.loc[time]['f'], etaa_des, fiaa_des,
@@ -240,13 +242,23 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
             if row['MAP'] == 'na':
                 row['MAP'] = np.nan
 
+            if processors.triggeri(row['StageSevo'], fiaa_sev, etaa_sev):
+                i_s = 1
+
+            if processors.triggeri(row['StageDes'], fiaa_des, etaa_des):
+                i_d = 1
+
+            row['i_s'] = i_s
+            row['i_d'] = i_d
+
             out_lines.append(row)
             #print row
 
         for index,pl_row in df_plasma.iterrows():
             if pl_row['Patient']==patient:
                 if pl_row['Used']==0:
-                    out_lines.append(processors.buildPlasmaOnlyRow(pl_row, df_plasma, df_timing_calculations))
+                    out_lines.append(
+                        processors.buildPlasmaOnlyRow(patient, index, pl_row, df_plasma, df_timing_calculations))
 
 
 

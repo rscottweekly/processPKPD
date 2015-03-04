@@ -9,9 +9,6 @@ import numpy as np
 
 import settings
 
-
-
-
 # Processes the plasma values file and corrects the unit error in the file
 def process_plasma(df_plasma):
     df_plasma = df_plasma[pd.notnull(df_plasma['Time'])]
@@ -30,7 +27,6 @@ def process_plasma(df_plasma):
 
     return df_plasma
 
-
 #Returns either a formatted number or a nan if the value is null
 def formatOrNAN(value, formatter):
     formatter = "{:" + formatter + "}"
@@ -40,14 +36,12 @@ def formatOrNAN(value, formatter):
     else:
         return np.nan
 
-
 #functions for loading individual patient data
 def load_monitor_data(patient):
     filename = settings.filename_template_monitor.replace("%", str(patient))
     print filename
     df = pd.read_csv(filename, parse_dates=['Time'], index_col=0)
     return df
-
 
 def process_vent_data(df_anaesthetic_details):
     #Iterate through the rows until get to the first ventilation setting then back fill it to first item
@@ -100,7 +94,6 @@ def process_vent_data(df_anaesthetic_details):
         df_anaesthetic_details['peep'] = data_peep
     return df_anaesthetic_details
 
-
 def load_anaesthetic_details(patient):
     filename = settings.filename_template_anaesdetails.replace("%", str(patient))
     xls_anaesthetic_details = pd.ExcelFile(filename)
@@ -117,7 +110,6 @@ def load_anaesthetic_details(patient):
 
     return df_anaesthetic_details
 
-
 def loadBISforPatient(patient):
     filename = settings.filename_template_bis.replace("%", str(patient))
 
@@ -129,7 +121,6 @@ def loadBISforPatient(patient):
 
     return df
 
-
 def getBISforTime(time, BISData):
     index = BISData.index
     if time in index:
@@ -139,31 +130,24 @@ def getBISforTime(time, BISData):
 
     return val
 
-
 #Calculation of timing
 def getETIsSevStart(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsSev_Start')
 
-
 def getETIsSevEnd(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsSev_End')
-
 
 def getETIsDesStart(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_Start')
 
-
 def getETIsDesEnd(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ETIsDes_End')
-
 
 def getChangeTime(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'ChangeTime')
 
-
 def stopVolatileTime(patient, df_timing_calculations):
     return processTimeforCol(patient, df_timing_calculations, 'StopVolatile')
-
 
 def processTimeforCol(patient, df_timing_calculations, col):
     row = df_timing_calculations.loc[patient]
@@ -172,14 +156,12 @@ def processTimeforCol(patient, df_timing_calculations, col):
         the_time = datetime.time(*row[col].to_pydatetime().timetuple()[3:6])
         return datetime.datetime.combine(row['DateTime'], the_time)
 
-
 def isPatientAlwaysSev(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
     if row['IsSevWholeTime'] == 'Y':
         return True
     else:
         return False
-
 
 def isPatientAlwaysDes(patient, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -188,11 +170,9 @@ def isPatientAlwaysDes(patient, df_timing_calculations):
     else:
         return False
 
-
 def doesPatientSwitchVolatile(patient, df_timing_calculations):
     return not (
         isPatientAlwaysDes(patient, df_timing_calculations) or isPatientAlwaysSev(patient, df_timing_calculations))
-
 
 def getTimeRangeForPatient(patient, df_timing_calculations):
     #print df_timing_calculations.loc[patient]
@@ -210,7 +190,6 @@ def getTimeRangeForPatient(patient, df_timing_calculations):
     #print "Case start time is {0} and end time is {1}".format(str(start_time),str(end_time))
 
     return pd.date_range(start=start_time, end=end_time, freq='1Min')
-
 
 def isETSev(patient, time, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -235,7 +214,6 @@ def isETSev(patient, time, df_timing_calculations):
         result = False
 
     return result
-
 
 def isETDes(patient, time, df_timing_calculations):
     row = df_timing_calculations.loc[patient]
@@ -262,7 +240,6 @@ def isETDes(patient, time, df_timing_calculations):
     return result
 
     #Clever functions that get anaesthetic agent and stages
-
 
 def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     result = 0.0
@@ -292,7 +269,6 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
         else:
             return 0.0
 
-
 def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     result = 0.0
     if volatile == 'S':
@@ -320,7 +296,6 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
         else:
             return 0.0
 
-
 def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
         df_plasma.loc[time,'Used']=1
@@ -328,7 +303,6 @@ def getPlasmaAA(patient, time, volatile, df_plasma):
             return df_plasma.loc[time]['Sev_mol/L'] * 1000000
         if volatile == 'D':
             return df_plasma.loc[time]['Des_mol/L'] * 1000000
-
 
 #Calculates Stages
 def getStage(patient, time, volatile, df_timing_calculations):
@@ -357,10 +331,8 @@ def getStage(patient, time, volatile, df_timing_calculations):
         else:
             return "1C"
 
-
 def calc_amt(p, v, r, t):
     return (p * v) / (r * t)
-
 
 def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
     #print  "Time %i" % time_s
@@ -375,24 +347,24 @@ def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
     period_vol = (time_s / 60) * min_vol
     fe_amt = calc_amt(pamb * fe, period_vol, r, t)
     fi_amt = calc_amt(pamb * fi, period_vol, r, t)
-    return (fi_amt - fe_amt) * 1000000
-
+    return (fi_amt - fe_amt) * 1000000000  # return mmol/L
 
 def calcBMI(weight, height):
     height = height / 100.0
     return weight / (height * height)
 
 
+def calcFRC(weight):
+    return 30 * weight
+
 def calcBSAMosteller(weight, height):
     return (height * weight / 36) ** 0.5
-
 
 def no_abg(patient, coding_info):
     if coding_info.loc[patient]['NoABG'] == 'Y':
         return True
     else:
         return False
-
 
 def calcAAGrad(patient, df_bloods, df_monitor_data, coding_info):
     if not no_abg(patient, coding_info):
@@ -407,7 +379,6 @@ def calcAAGrad(patient, df_bloods, df_monitor_data, coding_info):
     else:
         return np.nan
 
-
 def calcDeadspace(patient, df_bloods, df_monitor_data, coding_info):
     #Using Bohr Equation
     if not no_abg(patient, coding_info):
@@ -421,10 +392,8 @@ def calcDeadspace(patient, df_bloods, df_monitor_data, coding_info):
     else:
         return np.nan
 
-
 def correctVtforDeadSpace(vt, deadspace):
     return vt - (deadspace * vt)
-
 
 def load_timing_calcs():
     def fixtime(col):
@@ -446,7 +415,6 @@ def load_timing_calcs():
 
     return df_timing_calculations
 
-
 def calcGFR(age, weight, gender, creatinine):
     # (140-age) * (Wt in kg) * (0.85 if female) / (72 * Cr)
     gfr = ((140 - age) * weight * 1.23) / (creatinine)
@@ -455,7 +423,6 @@ def calcGFR(age, weight, gender, creatinine):
     else:
         return gfr
 
-
 # it's a really long story why this is here, don't try to think about it too hard, it will hurt your brains
 def strptimeme(val):
     try:
@@ -463,7 +430,6 @@ def strptimeme(val):
         return datetime.datetime.strptime(val, "%d/%m/%y %H:%M:%S")
     except:
         return datetime.datetime.now()
-
 
 def load_blood_results():
     fix_time = lambda x: strptimeme(x)
@@ -474,13 +440,11 @@ def load_blood_results():
 
     return df_blood_results
 
-
 def getIsPlasmaOnly(patient, df_coding_information):
     if df_coding_information.loc[patient]['HasBloods'] == 'Y':
         return "0"
     else:
         return "1"
-
 
 def getGroup(patient, df_timing_calculations):
     if isPatientAlwaysDes(patient, df_timing_calculations):
@@ -489,24 +453,17 @@ def getGroup(patient, df_timing_calculations):
         return "S"
     else:
         return "SD"
-
-
 def getIsCNB(patient, df_general_information):
     regional = df_general_information.loc[patient]['Regional block']
     strs = ["Epidural", "SAB", "Spinal"]
     if any(x in regional for x in strs):
         return 'Y'
 
-
 def getNumPlasmaSamples(patient, df_plasma):
     rows = df_plasma[df_plasma['Patient'] == patient]
     return len(rows)
-
-
 def getNumMonitorSamples(df_monitor):
     return len(df_monitor)
-
-
 def getOpType(patient, general_info):
     operation = general_info.loc[patient]['Opeartion']
 
@@ -524,21 +481,15 @@ def getOpType(patient, general_info):
         result = "other"
 
     return result
-
-
 def getDurationOp(patient, df_timing_calculations):
     timing = getTimeRangeForPatient(patient, df_timing_calculations)
     return (timing.max() - timing.min()).seconds / 60
-
-
 def getBaselineMAP(patient, general_info):
     bp = general_info.loc[patient]['Preinduction BP']
     bp_split = bp.split("/")
     sbp = int(bp_split[0])
     dbp = int(bp_split[1])
     return int(dbp + (sbp - dbp) / 3)
-
-
 def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value, excl_value):
     timeCount = datetime.datetime.fromtimestamp(0)
     monitor_data['tvalue'] = monitor_data.index
@@ -565,7 +516,7 @@ def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value,
     return diff
 
 
-def buildPlasmaOnlyRow(plasmaData, df_plasma, df_timing_calculations):
+def buildPlasmaOnlyRow(patient, time, plasmaData, df_plasma, df_timing_calculations):
     out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
         'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
         'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
@@ -573,13 +524,27 @@ def buildPlasmaOnlyRow(plasmaData, df_plasma, df_timing_calculations):
 
     row = dict.fromkeys(out_cols, "")
 
-    row['PatientID'] = patientID = plasmaData['Patient']
+    row['PatientID'] = patient
 
-    time_range = getTimeRangeForPatient(patientID, df_timing_calculations)
+    time_range = getTimeRangeForPatient(patient, df_timing_calculations)
 
-    row['Time'] = time = plasmaData['Time']
+    row['Time'] = time
     row['TotalTimeElapsed'] = int((time - time_range[0]).total_seconds() / 60)
 
-    row['PlasmaSevo'] = getPlasmaAA(patientID, time, "S", df_plasma)
+    row['StageSevo'] = getStage(patient, time, "S", df_timing_calculations)
+    row['StageDes'] = getStage(patient, time, "D", df_timing_calculations)
+
+    row['PlasmaSevo'] = getPlasmaAA(patient, time, "S", df_plasma)
+    row['PlasmaDes'] = getPlasmaAA(patient, time, "D", df_plasma)
+
+    row['i_s'] = 1
+    row['i_d'] = 1
+
 
     return row
+
+
+def triggeri(stage, fiaa, etaa):
+    if "C" in stage:
+        if fiaa < etaa:
+            return True
