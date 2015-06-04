@@ -125,6 +125,8 @@ def getBISforTime(time, BISData):
     index = BISData.index
     if time in index:
         val = int(BISData.loc[time]['BIS'])
+        if val < 0:
+            val = np.nan
     else:
         val = np.nan
 
@@ -548,3 +550,7 @@ def triggeri(stage, fiaa, etaa):
     if "C" in stage:
         if fiaa < etaa:
             return True
+
+
+def convertFracToMol(Frac, Press, R, Temp):
+    return (((Frac/100)*Press)/(R*Temp))

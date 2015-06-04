@@ -16,7 +16,7 @@ def resample_1min(coding_info, reprocess):
         print "Resampling Patient " + index
 
         if patient.ExcludeAll == 'Y':
-            print "Patient " + index + " exluded"
+            print "Patient " + index + " excluded"
             continue
 
         filename = "BIS_" + index + ".csv"

@@ -181,10 +181,12 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 pbar = float(monitor_data.loc[time]['Pamb']) * 0.1333
             except:
                 print time
-                raise
+                break
+                #raise
 
             etaa_sev = processors.getEtAA(patient, time, 'S', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
+
             fiaa_sev = processors.getFiAA(patient, time, 'S', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
 
@@ -226,10 +228,12 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 row['DoseSevo_DS'] = np.NaN
                 row['DoseDes_DS'] = np.NaN
 
-            row['EtSevo'] = processors.getEtAA(patient, time, 'S', monitor_data, anaesthetic_details,
-                                               df_timing_calculations)
-            row['EtDes'] = processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details,
-                                              df_timing_calculations)
+            row['EtSevo'] = processors.convertFracToMol(processors.getEtAA(patient, time, 'S', monitor_data, anaesthetic_details,
+                                               df_timing_calculations), pbar, settings.const_R, settings.const_T37)
+
+
+            row['EtDes'] = processors.convertFracToMol(processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details,
+                                              df_timing_calculations), pbar, settings.const_R, settings.const_T37)
 
             row['BIS'] = processors.getBISforTime(time, bis_data)
 
