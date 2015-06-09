@@ -242,7 +242,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
 
             row['MAP'] = monitor_data.loc[time]['P1mean']
             if pd.notnull(row['MAP']) and (row['MAP'] != "na"):
-                if float(row['MAP']) < 0 or float(row['MAP'] > 230):
+                if ((float(row['MAP']) < 0) or float(row['MAP']) > 250):
                     row['MAP'] = np.nan
                 else:
                     row['MAP'] = processors.formatOrNAN(float(row['MAP']), "0.0f")
