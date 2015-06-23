@@ -19,8 +19,8 @@ def process_plasma(df_plasma):
     #.date()#.to_datetime()#.date()
     df_plasma['DateTime'] = df_plasma.apply(combine, axis=1)
 
-    df_plasma['Des_mol/L'] = df_plasma['Des_mmol/L'] / 1000000
-    df_plasma['Sev_mol/L'] = df_plasma['Sev_mmol/L'] / 1000000
+    df_plasma['Des_mol/L'] = df_plasma['Des_mmol/L'] / 1e6
+    df_plasma['Sev_mol/L'] = df_plasma['Sev_mmol/L'] / 1e6
 
     df_plasma.set_index(['DateTime'], inplace=True)
     df_plasma['Used'] = 0
@@ -302,9 +302,9 @@ def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
         df_plasma.loc[time,'Used']=1
         if volatile == 'S':
-            return df_plasma.loc[time]['Sev_mol/L'] * 1000000
+            return df_plasma.loc[time]['Sev_mol/L'] * 1e6
         if volatile == 'D':
-            return df_plasma.loc[time]['Des_mol/L'] * 1000000
+            return df_plasma.loc[time]['Des_mol/L'] * 1e6
 
 #Calculates Stages
 def getStage(patient, time, volatile, df_timing_calculations):
@@ -347,8 +347,8 @@ def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
 
     pamb = pbar - settings.const_PH2O
     period_vol = (time_s / 60) * min_vol
-    fe_amt = calc_amt(pamb * fe, period_vol, r, t) * 100000
-    fi_amt = calc_amt(pamb * fi, period_vol, r, t) * 100000
+    fe_amt = calc_amt(pamb * fe, period_vol, r, t) * 1e6
+    fi_amt = calc_amt(pamb * fi, period_vol, r, t) * 1e6
     return (fi_amt - fe_amt)  # return mmol/L
 
 def calcBMI(weight, height):

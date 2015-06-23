@@ -230,13 +230,15 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 row['DoseDes_DS'] = np.NaN
 
             row['EtSevo'] = processors.convertFracToMol(processors.getEtAA(patient, time, 'S', monitor_data, anaesthetic_details,
-                                                                           df_timing_calculations), pbar,
-                                                        settings.const_R, settings.const_T37) * 10e6
+                                                                           df_timing_calculations),
+                                                        pbar - settings.const_PH2O,
+                                                        settings.const_R, settings.const_T37) * 1e6
 
 
             row['EtDes'] = processors.convertFracToMol(processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details,
-                                                                          df_timing_calculations), pbar,
-                                                       settings.const_R, settings.const_T37) * 10e6
+                                                                          df_timing_calculations),
+                                                       pbar - settings.const_PH2O,
+                                                       settings.const_R, settings.const_T37) * 1e6
 
             row['BIS'] = processors.getBISforTime(time, bis_data)
 
