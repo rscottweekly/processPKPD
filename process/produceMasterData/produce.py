@@ -154,6 +154,7 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
                 row['HasPlasma'] = processors.getIsPlasmaOnly(patient, coding_information)
                 row['Group'] = processors.getGroup(patient, df_timing_calculations)
                 row['Sex'] = df_general_info.loc[patient]['Sex']
+                row['SexNum'] = processors.sex_code(df_general_info.loc[patient]['Sex'])
                 row['Age'] = "%0.0f" % age
                 row['Weight'] = "%0.0f" % weight
                 row['Height'] = "%0.0f" % height
@@ -261,14 +262,15 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
             row['i_s'] = i_s
             row['i_d'] = i_d
 
+            row = processors.convertNaNToBlank(row)
             out_lines.append(row)
             #print row
 
         for index,pl_row in df_plasma.iterrows():
             if pl_row['Patient']==patient:
                 if pl_row['Used']==0:
-                    out_lines.append(
-                        processors.buildPlasmaOnlyRow(patient, index, pl_row, df_plasma, df_timing_calculations))
+                    out_lines.append(processors.convertNaNToBlank(
+                        processors.buildPlasmaOnlyRow(patient, index, pl_row, df_plasma, df_timing_calculations)))
 
 
 
@@ -299,6 +301,7 @@ def processCovariates(coding_information):
             row['Group'] = processors.getGroup(patient, df_timing_calculations)
             row['Age'] = age = df_general_info.loc[patient]['Age']
             row['Sex'] = sex = df_general_info.loc[patient]['Sex']
+            row['SexNum'] = processors.sex_code(row['Sex'])
             row['Weight'] = weight = df_general_info.loc[patient]['Weight']
             row['Height'] = height = df_general_info.loc[patient]['Height']
             row['FRC'] = weight * 0.03  #30ml/kg
@@ -371,6 +374,7 @@ def processCovariates(coding_information):
             row['TimeSpO2<90'] = str(timeSpO290)
             row['PctTimeSpO2<90'] = 100 * timeSpO290 / row['DurationOp']
 
+            row = processors.convertNaNToBlank(row)
             out_lines.append(row)
 
     out_final = pd.DataFrame(out_lines)

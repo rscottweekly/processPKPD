@@ -36,6 +36,29 @@ def formatOrNAN(value, formatter):
     else:
         return np.nan
 
+
+def sex_code(sex):
+    if sex.upper() == "M":
+        return 1
+    elif sex.upper() == "F":
+        return 0
+    else:
+        return -1
+
+
+def convertNaNToBlank(row):
+    result = {}
+    for key, value in row.iteritems():
+        #    print "Key:"+str(key)+", value: "+str(value)
+
+        if str(value) == "nan":
+            result[key] = ""
+            print "Key:" + str(key) + ", value: " + str(value)
+        else:
+            result[key] = value
+    return result
+
+
 #functions for loading individual patient data
 def load_monitor_data(patient):
     filename = settings.filename_template_monitor.replace("%", str(patient))
@@ -264,12 +287,12 @@ def getEtAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
             return result
         except:
             print patient, time, volatile
-            return 0.0
+            return
     else:
         if not (np.isnan(result)):
             return result
         else:
-            return 0.0
+            return np.nan
 
 def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_calculations):
     result = 0.0
@@ -291,12 +314,12 @@ def getFiAA(patient, time, volatile, monitor_data, anaesthetic_details, timing_c
             return result
         except:
             print patient, time, volatile
-            return 0.0
+            return np.nan
     else:
         if not (np.isnan(result)):
             return result
         else:
-            return 0.0
+            return np.nan
 
 def getPlasmaAA(patient, time, volatile, df_plasma):
     if time in df_plasma.index:
