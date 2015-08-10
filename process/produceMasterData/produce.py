@@ -1,3 +1,4 @@
+
 __author__ = 'rscottweekly'
 
 import sys
@@ -10,6 +11,11 @@ import processors
 
 
 def individual_patient(coding_information):
+    """ Produces the entire information for a single patient, from the patient's given coding information
+    :param coding_information:
+    :return: nil
+    """
+
     print "CALCULATING FOR INDIVIDUAL PATIENTS"
     df_timing_calculations = processors.load_timing_calcs()
 
@@ -27,20 +33,20 @@ def individual_patient(coding_information):
                               coding_information, df_plasma)
         if line != None:
             final = pd.DataFrame(line)
-            # out_cols = ['PatientID', 'Time', 'TotalTimeElapsed', 'StageSevo', 'StageDes', 'StageElapsedSevo',
-            #            'StageElapsedDes', 'DoseDes', 'DoseDes_DS', 'DoseSevo', 'DoseSevo_DS', 'PlasmaSevo',
-            #            'PlasmaDes', 'EtSevo', 'EtDes', 'BIS', 'MAP', 'Age', 'Sex', 'ASA', 'Weight', 'Height', 'BMI',
-            #            'BSA', 'GFR', 'AaGradient', 'DeadSpace', ]
             out_cols = settings.out_cols
             try:
                 final.to_csv(settings.out_filename_template_individual.replace('%', index), dateformat="%Y-%m-%d %H:%M",
                              index=False, columns=out_cols)
             except:
-                print "errow with " + index
+                print "error with " + index
                 print final.columns.values
 
 
 def full_calc(coding_information):
+    """Performs all relevant calculations for the entire patient group, with all data outputs
+    :param coding_information:
+    :return: void
+    """
     print "FULL PATIENT CALCULATIONS"
     df_timing_calculations = processors.load_timing_calcs()
 
