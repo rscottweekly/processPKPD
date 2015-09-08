@@ -51,16 +51,17 @@ def convert_monitordata(coding_info, reprocess):
         df_min_median = df.resample('T', how='median')
         df_min_mean = df.resample('T', how='mean')
 
-        df_min_median = filterBP(df_min_median)
-        df_min_mean = filterBP(df_min_mean)
+        #        df_min_median = filterBP(df_min_median)
+        #        df_min_mean = filterBP(df_min_mean)
 
         df_min_median.to_csv(os.path.join(settings.prod_dir_monitor, index + '.median.csv'), na_rep="na")
         df_min_mean.to_csv(os.path.join(settings.prod_dir_monitor, index + '.mean.csv'), na_rep="na")
 
-def filterBP(df):
+        # def filterBP(df):
     #calculate windows
 
-    df['rollingmedian'] <- pd.rolling_median(df['P1Sys'])
-    df['rollingstdv'] <- pd.rolling_std(df['P1Sys'])
+        #   df['rollingmedian'] = pd.rolling_median(df['P1Sys'])
+
+#   df['rollingstdv'] = pd.rolling_std(df['P1Sys'])
 
 

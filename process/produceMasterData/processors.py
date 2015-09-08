@@ -53,7 +53,7 @@ def convertNaNToBlank(row):
 
         if str(value) == "nan":
             result[key] = ""
-            print "Key:" + str(key) + ", value: " + str(value)
+            # print "Key:" + str(key) + ", value: " + str(value)
         else:
             result[key] = value
     return result
@@ -562,8 +562,17 @@ def buildPlasmaOnlyRow(patient, time, plasmaData, df_plasma, df_timing_calculati
     row['PlasmaSevo'] = getPlasmaAA(patient, time, "S", df_plasma)
     row['PlasmaDes'] = getPlasmaAA(patient, time, "D", df_plasma)
 
-    row['i_s'] = 1
-    row['i_d'] = 1
+    i_d = 0
+    i_s = 0
+
+    if "C" in row['StageSevo']:
+        i_s = 1
+
+    if "C" in row['StageDes']:
+        i_d = 1
+
+    row['i_s'] = i_s
+    row['i_d'] = i_d
 
 
     return row

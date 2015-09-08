@@ -197,34 +197,52 @@ def processPatient(patient, patient_row, df_general_info, df_blood_results, df_t
 
             fiaa_sev = processors.getFiAA(patient, time, 'S', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
-
-            try:
-                row['DoseSevo'] = "%0.1f" % processors.calc_volatile(60, anaesthetic_details.loc[time]['vt'] *
+            sevo_ds_makes_sense = True
+            # print time
+            # print "etaa = " + str(etaa_sev)
+            # print "fiaa = " + str(fiaa_sev)
+            # print abs(etaa_sev - fiaa_sev)
+            # print (abs(etaa_sev - fiaa_sev) <= 0.0011)
+            if (abs(etaa_sev - fiaa_sev) <= 0.0011) and not (processors.isETSev(patient, time, df_timing_calculations)):
+                # print "Skipping at " + time + "with etaa = " + etaa_sev + "and fiaa = " + fiaa_sev
+                # print "I was skipped"
+                row['DoseSevo'] = np.nan
+                sevo_ds_makes_sense = False
+            else:
+                try:
+                    row['DoseSevo'] = "%0.1f" % processors.calc_volatile(60, anaesthetic_details.loc[time]['vt'] *
                                                                      anaesthetic_details.loc[time]['f'], etaa_sev,
                                                                      fiaa_sev, pbar, settings.const_R,
                                                                      settings.const_T37)
-            except:
-                exc_info = sys.exc_info()
-                print time
-                raise exc_info[0], exc_info[1], exc_info[2]
+                except:
+                    exc_info = sys.exc_info()
+                    print time
+                    raise exc_info[0], exc_info[1], exc_info[2]
 
             etaa_des = processors.getEtAA(patient, time, 'D', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
             fiaa_des = processors.getFiAA(patient, time, 'D', monitor_data, anaesthetic_details,
                                           df_timing_calculations) / 100
 
+            des_ds_makes_sense = True
+            if (abs(etaa_des - fiaa_des) <= 0.0011) and not (processors.isETDes(patient, time, df_timing_calculations)):
+                row['DoseDes'] = np.nan
+                des_ds_makes_sense = False
+            else:
 
-            row['DoseDes'] = "%0.1f" % processors.calc_volatile(60, anaesthetic_details.loc[time]['vt'] *
+                row['DoseDes'] = "%0.1f" % processors.calc_volatile(60, anaesthetic_details.loc[time]['vt'] *
                                                                 anaesthetic_details.loc[time]['f'], etaa_des, fiaa_des,
                                                                 pbar, settings.const_R, settings.const_T37)
 
             if not processors.no_abg(patient, coding_information):
-                row['DoseSevo_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
-                    anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_sev,
+                if sevo_ds_makes_sense:
+                    row['DoseSevo_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
+                        anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_sev,
                                                                         fiaa_sev, pbar, settings.const_R,
                                                                         settings.const_T37)
-                row['DoseDes_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
-                    anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_des,
+                if des_ds_makes_sense:
+                    row['DoseDes_DS'] = "%0.1f" % processors.calc_volatile(60, processors.correctVtforDeadSpace(
+                        anaesthetic_details.loc[time]['vt'], deadspace) * anaesthetic_details.loc[time]['f'], etaa_des,
                                                                        fiaa_des, pbar, settings.const_R,
                                                                        settings.const_T37)
                 row['PlasmaSevo'] = processors.formatOrNAN(processors.getPlasmaAA(patient, time, 'S', df_plasma),
