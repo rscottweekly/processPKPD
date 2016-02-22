@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 
 import settings
+import numbers, math
+
 
 # Processes the plasma values file and corrects the unit error in the file
 def process_plasma(df_plasma):
@@ -147,7 +149,9 @@ def loadBISforPatient(patient):
 def getBISforTime(time, BISData):
     index = BISData.index
     if time in index:
-        val = int(BISData.loc[time]['BIS'])
+        val = BISData.loc[time]['BIS']
+        if isinstance(val, numbers.Number) and (not (math.isnan(val))):
+            val = int(val)
         if val < 0:
             val = np.nan
     else:
