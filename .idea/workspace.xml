@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c8a7d42-5e99-4048-82b7-95c2091f8c3b" name="Default" comment="1. Fixed the switch (i) variable for the plasma only data points so that it doesn’t just carry forward the last value&#10;2. I had to change the times on a couple (pt 10 &amp; 13) of first measured plasma values. There was no monitor data at the time of the plasma sample. This simply required that the time moved forward one minute to align these two times.&#10;3. Any volatile value that was manually documented and is &lt;= to 0.1% difference between Fi and Et is now missing data&#10;4. Fixed the issue where BIS nan would throw error&#10;5. Updated folders for new mac">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/_static/jquery.js" afterPath="$PROJECT_DIR$/build/html/_static/jquery.js" />
+    <list default="true" id="5c8a7d42-5e99-4048-82b7-95c2091f8c3b" name="Default" comment="Tidied up a few things. Nothing major">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="processPKPD.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,14 +27,80 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="processPKPD.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="processPKPD.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/processPKPD.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.27272728">
+            <state vertical-scroll-proportion="0.0">
               <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="processors.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/process/produceMasterData/processors.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6181818">
+              <caret line="390" column="0" selection-start-line="390" selection-start-column="0" selection-end-line="390" selection-end-column="0" />
+              <folding>
+                <element signature="e#29#44#0" expanded="true" />
+                <element signature="e#1832#3854#0" expanded="false" />
+                <element signature="e#3899#4581#0" expanded="false" />
+                <element signature="e#4619#4910#0" expanded="false" />
+                <element signature="e#5306#5380#0" expanded="false" />
+                <element signature="e#5438#5510#0" expanded="false" />
+                <element signature="e#5570#5644#0" expanded="false" />
+                <element signature="e#5702#5774#0" expanded="false" />
+                <element signature="e#5832#5903#0" expanded="false" />
+                <element signature="e#5964#6037#0" expanded="false" />
+                <element signature="e#6104#6401#0" expanded="false" />
+                <element signature="e#6464#6593#0" expanded="false" />
+                <element signature="e#6656#6785#0" expanded="false" />
+                <element signature="e#6855#6983#0" expanded="false" />
+                <element signature="e#7050#7799#0" expanded="false" />
+                <element signature="e#8411#8968#0" expanded="false" />
+                <element signature="e#12605#12666#0" expanded="false" />
+                <element signature="e#12832#12927#0" expanded="false" />
+                <element signature="e#12999#13477#0" expanded="false" />
+                <element signature="e#13552#13951#0" expanded="false" />
+                <element signature="e#13999#14027#0" expanded="false" />
+                <element signature="e#14058#14780#0" expanded="false" />
+                <element signature="e#14084#14381#0" expanded="false" />
+                <element signature="e#14832#15021#0" expanded="false" />
+                <element signature="e#15154#15297#0" expanded="false" />
+                <element signature="e#15329#15647#0" expanded="false" />
+                <element signature="e#15706#15812#0" expanded="false" />
+                <element signature="e#15866#16051#0" expanded="false" />
+                <element signature="e#16321#16391#0" expanded="false" />
+                <element signature="e#16436#16458#0" expanded="false" />
+                <element signature="e#16503#17024#0" expanded="false" />
+                <element signature="e#17083#17201#0" expanded="false" />
+                <element signature="e#17251#17421#0" expanded="false" />
+                <element signature="e#17522#18315#0" expanded="false" />
+                <element signature="e#18408#19486#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="produce.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/process/produceMasterData/produce.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="256" column="49" selection-start-line="256" selection-start-column="49" selection-end-line="256" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/process/produceMasterData/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -54,7 +120,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <push-targets>
-      <push-target-info repo="$PROJECT_DIR$" source="master" target-remote="origin" target-branch="master" />
+      <push-target-info repo="$PROJECT_DIR$" source="master" target-remote="origin2" target-branch="master" />
     </push-targets>
   </component>
   <component name="IdeDocumentHistory">
@@ -106,7 +172,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -167,6 +232,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="process" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="produceMasterData" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="produce.py" />
+              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="processPKPD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="processPKPD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="process" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="general" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="processPKPD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="processPKPD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="build" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -174,6 +279,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -582,7 +688,13 @@
       <option name="project" value="LOCAL" />
       <updated>1456104673898</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Tidied up a few things. Nothing major">
+      <created>1456114872817</created>
+      <option name="number" value="00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1456114872817</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -611,6 +723,7 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25208333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32907802" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32907802" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26611957" sideWeight="0.17788461" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328125" sideWeight="0.496875" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328125" sideWeight="0.490625" order="12" side_tool="false" content_ui="tabs" />
@@ -619,7 +732,6 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32907802" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -666,7 +778,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Beginning Master Producing File&#10;" />
     <MESSAGE value="On way" />
     <MESSAGE value="transferred things from notebook" />
     <MESSAGE value="Fixing timing calculations&#10;Breakpoint so can roll back if I break it" />
@@ -691,7 +802,8 @@
     <MESSAGE value="Added three things:&#10;&#10;1. Rows that are NaN are now properly blanked&#10;2. If there is no data for des/sevo, the cell is blank.&#10;3. SexNum is new column - 0 for female, 1 for male." />
     <MESSAGE value="1. Fixed the switch (i) variable for the plasma only data points so that it doesn’t just carry forward the last value&#10;2. I had to change the times on a couple (pt 10 &amp; 13) of first measured plasma values. There was no monitor data at the time of the plasma sample. This simply required that the time moved forward one minute to align these two times.&#10;3. Any volatile value that was manually documented and is &lt;= to 0.1% difference between Fi and Et is now missing data&#10;" />
     <MESSAGE value="1. Fixed the switch (i) variable for the plasma only data points so that it doesn’t just carry forward the last value&#10;2. I had to change the times on a couple (pt 10 &amp; 13) of first measured plasma values. There was no monitor data at the time of the plasma sample. This simply required that the time moved forward one minute to align these two times.&#10;3. Any volatile value that was manually documented and is &lt;= to 0.1% difference between Fi and Et is now missing data&#10;4. Fixed the issue where BIS nan would throw error&#10;5. Updated folders for new mac" />
-    <option name="LAST_COMMIT_MESSAGE" value="1. Fixed the switch (i) variable for the plasma only data points so that it doesn’t just carry forward the last value&#10;2. I had to change the times on a couple (pt 10 &amp; 13) of first measured plasma values. There was no monitor data at the time of the plasma sample. This simply required that the time moved forward one minute to align these two times.&#10;3. Any volatile value that was manually documented and is &lt;= to 0.1% difference between Fi and Et is now missing data&#10;4. Fixed the issue where BIS nan would throw error&#10;5. Updated folders for new mac" />
+    <MESSAGE value="Tidied up a few things. Nothing major" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tidied up a few things. Nothing major" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -731,9 +843,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -765,24 +875,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -838,9 +949,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="336" column="16" selection-start-line="336" selection-start-column="16" selection-end-line="336" selection-end-column="32" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -865,24 +974,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -916,9 +1026,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="314" column="0" selection-start-line="314" selection-start-column="0" selection-end-line="314" selection-end-column="0" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -943,24 +1051,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1018,24 +1127,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1051,9 +1161,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="247" column="0" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1071,9 +1179,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1098,24 +1204,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1252,10 +1359,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/process/BIS/ProcessBIS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.025083613">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/process/general/general.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.050167225">
+          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/process/produceMasterData/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/processPKPD.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/process/produceMasterData/produce.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="256" column="49" selection-start-line="256" selection-start-column="49" selection-end-line="256" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/process/produceMasterData/processors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.0819397">
-          <caret line="155" column="24" selection-start-line="155" selection-start-column="24" selection-end-line="155" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.6181818">
+          <caret line="390" column="0" selection-start-line="390" selection-start-column="0" selection-end-line="390" selection-end-column="0" />
           <folding>
             <element signature="e#29#44#0" expanded="true" />
             <element signature="e#1832#3854#0" expanded="false" />
@@ -1273,66 +1421,25 @@
             <element signature="e#6855#6983#0" expanded="false" />
             <element signature="e#7050#7799#0" expanded="false" />
             <element signature="e#8411#8968#0" expanded="false" />
-            <element signature="e#12594#12655#0" expanded="false" />
-            <element signature="e#12821#12916#0" expanded="false" />
-            <element signature="e#12988#13466#0" expanded="false" />
-            <element signature="e#13541#13940#0" expanded="false" />
-            <element signature="e#13988#14016#0" expanded="false" />
-            <element signature="e#14047#14769#0" expanded="false" />
-            <element signature="e#14073#14370#0" expanded="false" />
-            <element signature="e#14821#15010#0" expanded="false" />
-            <element signature="e#15143#15286#0" expanded="false" />
-            <element signature="e#15318#15636#0" expanded="false" />
-            <element signature="e#15695#15801#0" expanded="false" />
-            <element signature="e#15854#16039#0" expanded="false" />
-            <element signature="e#16307#16377#0" expanded="false" />
-            <element signature="e#16420#16442#0" expanded="false" />
-            <element signature="e#16485#17006#0" expanded="false" />
-            <element signature="e#17063#17181#0" expanded="false" />
-            <element signature="e#17229#17399#0" expanded="false" />
-            <element signature="e#17498#18291#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/process/produceMasterData/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5735786">
-          <caret line="37" column="42" selection-start-line="37" selection-start-column="42" selection-end-line="37" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/process/produceMasterData/produce.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.27591974">
-          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
-          <folding>
-            <element signature="e#30#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/process/BIS/ProcessBIS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.025083613">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/process/general/general.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.050167225">
-          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/processPKPD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27272728">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#12605#12666#0" expanded="false" />
+            <element signature="e#12832#12927#0" expanded="false" />
+            <element signature="e#12999#13477#0" expanded="false" />
+            <element signature="e#13552#13951#0" expanded="false" />
+            <element signature="e#13999#14027#0" expanded="false" />
+            <element signature="e#14058#14780#0" expanded="false" />
+            <element signature="e#14084#14381#0" expanded="false" />
+            <element signature="e#14832#15021#0" expanded="false" />
+            <element signature="e#15154#15297#0" expanded="false" />
+            <element signature="e#15329#15647#0" expanded="false" />
+            <element signature="e#15706#15812#0" expanded="false" />
+            <element signature="e#15866#16051#0" expanded="false" />
+            <element signature="e#16321#16391#0" expanded="false" />
+            <element signature="e#16436#16458#0" expanded="false" />
+            <element signature="e#16503#17024#0" expanded="false" />
+            <element signature="e#17083#17201#0" expanded="false" />
+            <element signature="e#17251#17421#0" expanded="false" />
+            <element signature="e#17522#18315#0" expanded="false" />
+            <element signature="e#18408#19486#0" expanded="false" />
           </folding>
         </state>
       </provider>
