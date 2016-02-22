@@ -364,19 +364,19 @@ def calc_amt(p, v, r, t):
     return (p * v) / (r * t)
 
 def calc_volatile(time_s, min_vol, fe, fi, pbar, r, t):
-    #print  "Time %i" % time_s
-    #print "Minute Volume %f" % min_vol
-    #print "Fe %f" % fe
-    #print "Fi  %d" % fi
-    #print pbar
-    #print r
-    #print t
+    # print  "Time %i" % time_s
+    # print "Minute Volume %f" % min_vol
+    # print "Fe %f" % fe
+    # print "Fi  %d" % fi
+    # print pbar
+    # print r
+    # print t
 
     pamb = pbar - settings.const_PH2O
     period_vol = (time_s / 60) * min_vol
     fe_amt = calc_amt(pamb * fe, period_vol, r, t) * 1e6
     fi_amt = calc_amt(pamb * fi, period_vol, r, t) * 1e6
-    return (fi_amt - fe_amt)  # return mmol/L
+    return (fi_amt - fe_amt)  # return micromol/L
 
 def calcBMI(weight, height):
     height = height / 100.0
@@ -475,6 +475,7 @@ def getIsPlasmaOnly(patient, df_coding_information):
     else:
         return "1"
 
+
 def getGroup(patient, df_timing_calculations):
     if isPatientAlwaysDes(patient, df_timing_calculations):
         return "D"
@@ -482,6 +483,8 @@ def getGroup(patient, df_timing_calculations):
         return "S"
     else:
         return "SD"
+
+
 def getIsCNB(patient, df_general_information):
     regional = df_general_information.loc[patient]['Regional block']
     strs = ["Epidural", "SAB", "Spinal"]
@@ -491,8 +494,12 @@ def getIsCNB(patient, df_general_information):
 def getNumPlasmaSamples(patient, df_plasma):
     rows = df_plasma[df_plasma['Patient'] == patient]
     return len(rows)
+
+
 def getNumMonitorSamples(df_monitor):
     return len(df_monitor)
+
+
 def getOpType(patient, general_info):
     operation = general_info.loc[patient]['Opeartion']
 
@@ -510,15 +517,21 @@ def getOpType(patient, general_info):
         result = "other"
 
     return result
+
+
 def getDurationOp(patient, df_timing_calculations):
     timing = getTimeRangeForPatient(patient, df_timing_calculations)
     return (timing.max() - timing.min()).seconds / 60
+
+
 def getBaselineMAP(patient, general_info):
     bp = general_info.loc[patient]['Preinduction BP']
     bp_split = bp.split("/")
     sbp = int(bp_split[0])
     dbp = int(bp_split[1])
     return int(dbp + (sbp - dbp) / 3)
+
+
 def calcTimeSpanBelow(patient, monitor_data, df_timing_calculations, col, value, excl_value):
     timeCount = datetime.datetime.fromtimestamp(0)
     monitor_data['tvalue'] = monitor_data.index
